@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RegisterActivity">
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.25" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.35" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <TextView
+        android:id="@+id/activity_register_TV_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="@string/username"
+        android:textColor="@color/colorPinkMain"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline6"
+        app:layout_constraintEnd_toStartOf="@+id/guideline7" />
+
+    <TextView
+        android:id="@+id/activity_register_TV_pw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/password"
+        android:textColor="@color/colorPinkMain"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline7"
+        app:layout_constraintTop_toTopOf="@+id/guideline6" />
+
+    <EditText
+        android:id="@+id/activity_register_ET_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="@string/username_hint"
+        android:textColor="@color/colorPinkDark"
+        app:layout_constraintBaseline_toBaselineOf="@+id/activity_register_TV_name"
+        app:layout_constraintStart_toStartOf="@+id/guideline7" />
+
+    <EditText
+        android:id="@+id/activity_register_ET_pw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:hint="@string/password_hint"
+        android:textColor="@color/colorPinkDark"
+        app:layout_constraintBaseline_toBaselineOf="@+id/activity_register_TV_pw"
+        app:layout_constraintStart_toStartOf="@+id/guideline7" />
+
+    <EditText
+        android:id="@+id/activity_register_ET_pw_confirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:hint="@string/password_confirm_hint"
+        android:textColor="@color/colorPinkDark"
+        app:layout_constraintBaseline_toBaselineOf="@+id/activity_register_TV_pw_confirm"
+        app:layout_constraintStart_toStartOf="@+id/guideline7" />
+
+    <TextView
+        android:id="@+id/activity_register_TV_pw_confirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/password_confirm"
+        android:textSize="20sp"
+        android:textColor="@color/colorPinkDark"
+        app:layout_constraintEnd_toStartOf="@+id/guideline7"
+        app:layout_constraintTop_toBottomOf="@+id/activity_register_TV_pw" />
+
+    <TextView
+        android:id="@+id/activity_register_TV_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/email"
+        android:textSize="20sp"
+        android:textColor="@color/colorPinkDark"
+        app:layout_constraintEnd_toStartOf="@+id/guideline7"
+        app:layout_constraintTop_toBottomOf="@+id/activity_register_TV_pw_confirm" />
+
+    <EditText
+        android:id="@+id/activity_register_ET_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:ems="10"
+        android:inputType="textEmailAddress"
+        android:hint="@string/email_hint"
+        android:textColor="@color/colorPinkDark"
+        app:layout_constraintBaseline_toBaselineOf="@+id/activity_register_TV_email"
+        app:layout_constraintStart_toStartOf="@+id/guideline7" />
+
+    <Button
+        android:id="@+id/activity_register_BTN_register"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="64dp"
+        android:background="@color/colorPinkMain"
+        android:text="@string/register"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/guideline8"
+        app:layout_constraintTop_toBottomOf="@+id/activity_register_ET_email" />
+
+    <Button
+        android:id="@+id/activity_register_BTN_cancel"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="@string/cancel"
+        android:background="@color/colorPinkMain"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintBaseline_toBaselineOf="@+id/activity_register_BTN_register"
+        app:layout_constraintEnd_toStartOf="@+id/guideline8" />
+</android.support.constraint.ConstraintLayout>

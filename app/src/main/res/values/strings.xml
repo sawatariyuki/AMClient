@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">AMClient</string>
+    <string name="app_name_with_rights">Copyright © 2018 sawatariyuki@NTS. All rights reserved.</string>
+    <string name="studio_name">New-Type STUDIO</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="state">state:</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <!--left drawer-->
+    <string name="inactivate">Account is inactivated</string>
+
+    <!--login activity-->
+    <string name="username">Username</string>
+    <string name="username_hint">input your username</string>
+    <string name="password">Password</string>
+    <string name="password_hint">input your password</string>
+    <string name="remember">Lazy</string>
+
+    <!--register activity-->
+    <string name="password_confirm">Again</string>
+    <string name="password_confirm_hint">input password again</string>
+    <string name="email">Email</string>
+    <string name="email_hint">input your email</string>
+    <string name="cancel">Cancel</string>
+</resources>
