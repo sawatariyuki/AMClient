@@ -23,6 +23,7 @@ import com.gift.sawatariyuki.amclient.ServerNetwork.RequestCenter;
 import com.gift.sawatariyuki.amclient.Utils.dataRecoder.DataRecorder;
 import com.gift.sawatariyuki.amclient.Utils.okHttp.listener.DisposeDataListener;
 import com.gift.sawatariyuki.amclient.Utils.okHttp.request.RequestParams;
+import com.gift.sawatariyuki.amclient.Utils.validation.NetworkValidation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -121,6 +122,10 @@ public class LoginActivity extends AppCompatActivity {
                     recorder.save("isRemember", false);
                 }
                 //SEND POST REQUEST
+                if(!NetworkValidation.isNetworkAvailable(view.getContext())){
+                    Toast.makeText(LoginActivity.this, "no network available", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 RequestParams params = new RequestParams();
                 params.put("name", username);
                 params.put("pw", password);

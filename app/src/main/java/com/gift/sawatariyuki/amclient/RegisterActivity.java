@@ -21,6 +21,7 @@ import com.gift.sawatariyuki.amclient.Utils.dataRecoder.DataRecorder;
 import com.gift.sawatariyuki.amclient.Utils.okHttp.listener.DisposeDataListener;
 import com.gift.sawatariyuki.amclient.Utils.okHttp.request.RequestParams;
 import com.gift.sawatariyuki.amclient.Utils.validation.InputValidation;
+import com.gift.sawatariyuki.amclient.Utils.validation.NetworkValidation;
 
 public class RegisterActivity extends AppCompatActivity {
     private TextView activity_register_TV_name;
@@ -110,6 +111,10 @@ public class RegisterActivity extends AppCompatActivity {
                 final String name = activity_register_ET_name.getText().toString().trim();
 
                 //SEND POST REQUEST
+                if(!NetworkValidation.isNetworkAvailable(view.getContext())){
+                    Toast.makeText(RegisterActivity.this, "no network available", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 RequestParams params = new RequestParams();
                 params.put("name", name);
                 params.put("pw", pw);

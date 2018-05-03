@@ -2,7 +2,6 @@ package com.gift.sawatariyuki.amclient;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
@@ -20,6 +19,7 @@ import android.widget.Toast;
 
 import com.gift.sawatariyuki.amclient.Bean.LoginResponse;
 import com.gift.sawatariyuki.amclient.Utils.dataRecoder.DataRecorder;
+import com.gift.sawatariyuki.amclient.Utils.validation.NetworkValidation;
 
 public class HomeActivity extends AppCompatActivity {
     private Button left_drawer_BTN_login;
@@ -43,6 +43,10 @@ public class HomeActivity extends AppCompatActivity {
         recorder = new DataRecorder(this);
         initListener();
         initData();
+
+        if(!NetworkValidation.isNetworkAvailable(this)){
+            Toast.makeText(HomeActivity.this, "no network available", Toast.LENGTH_SHORT).show();
+        }
 
     }
 
@@ -140,9 +144,9 @@ public class HomeActivity extends AppCompatActivity {
     }
 
 
-
-
-
+    /**
+     * 圆形扩散转场动画
+     */
     private void  roundLoad(int startX, int startY, final Class<?> cls){
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             DisplayMetrics metrics =new DisplayMetrics();
