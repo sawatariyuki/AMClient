@@ -5,6 +5,8 @@ public class ServerApi {
 
     public static String login = URL + "user/loginPage";
     public static String register = URL + "user/register";
+    public static String getUserEvent = URL + "event/getEvent";
+
 
     public static String getAll = URL + "getAll";
     public static String activate_GET = URL + "activate";

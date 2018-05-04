@@ -24,11 +24,11 @@ import okhttp3.Response;
  */
 
 @SuppressWarnings("UnnecessaryReturnStatement")
-public class CommonJsonCallback implements Callback {
+public class CommonJsonCallback implements Callback{
 
     //与服务器的字段的一个对应关系
     protected final String RESULT_CODE = "code"; //有返回则对于http请求来说是成功的，但还有可能是业务逻辑上的错误
-    protected final int RESULT_CODE_VALUE = 0;
+    protected final int RESULT_ERROR_CODE_VALUE = 666;
     protected final String ERROR_MSG = "msg";
     protected final String EMPTY_MSG = "";
 
@@ -40,16 +40,18 @@ public class CommonJsonCallback implements Callback {
     private Handler mDeliveryHandler; //进行消息的转发
     private DisposeDataListener mListener;
     private Class<?> mClass;
+    private Class<?> mDefaultClass;
 
-    public CommonJsonCallback(DisposeDataHandle handle) {
+    public CommonJsonCallback(DisposeDataHandle handle){
         this.mListener = handle.mListener;
         this.mClass = handle.mClass;
+        this.mDefaultClass = handle.mDefaultClass;
         this.mDeliveryHandler = new Handler(Looper.getMainLooper());
     }
 
-    //请求失败的处理
+    // 请求失败的处理
     @Override
-    public void onFailure(@NonNull Call call, @NonNull final IOException e) {
+    public void onFailure(@NonNull Call call, @NonNull final IOException e){
         mDeliveryHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -58,9 +60,9 @@ public class CommonJsonCallback implements Callback {
         });
     }
 
-    //请求成功的处理
+    // 请求成功的处理
     @Override
-    public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+    public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException{
         final String result = response.body().string();
         mDeliveryHandler.post(new Runnable() {
             @Override
@@ -70,36 +72,43 @@ public class CommonJsonCallback implements Callback {
         });
     }
 
-    //处理成功的响应
-    private void handleResponse(Object responseObj) {
+    // 处理成功的响应
+    private void handleResponse(Object responseObj){
         Log.d("DEBUG", "In CommonJsonCallback: " + responseObj.toString());
 
-        if (responseObj == null && responseObj.toString().trim().equals("")) {
+        if(responseObj == null && responseObj.toString().trim().equals("")){
             mListener.onFailure(new OkHttpException(NETWORK_ERROR, EMPTY_MSG));
             return;
         }
-        try {
+        try{
             JSONObject result = new JSONObject(responseObj.toString());
             Log.d("DEBUG", "In CommonJsonCallback: ->try" + result.toString());
-            if (result.has(RESULT_CODE)) {
-                Log.d("DEBUG", "In CommonJsonCallback: ->if result.has(RESULT_CODE)");
-                //从JSON对象中取出我们的响应码，如果为0，则是正确的响应
-                if (result.getInt(RESULT_CODE) == RESULT_CODE_VALUE) {
-                    if (mClass == null) {
+            if(result.has(RESULT_CODE)){
+                //从JSON对象中取出我们的响应码，如果不为666，则是正确的响应
+                if(result.getInt(RESULT_CODE) != RESULT_ERROR_CODE_VALUE){
+                    if(mClass == null){
                         mListener.onSuccess(responseObj);
-                    } else { //需要转化为实体对象
-                        Object obj = new Gson().fromJson((String) responseObj, mClass);
-                        if (obj != null) { //表明正确的转为了实体对象
+                    }else{ //需要转化为实体对象
+                        Object obj = null;
+                        //响应码为 0 则使用正常类解析;响应码为 1 则用默认类解析
+                        if(result.getInt(RESULT_CODE) == 0){
+                            Log.d("DEBUG", "In CommonJsonCallback: ->try Using Full class");
+                            obj = new Gson().fromJson((String) responseObj, mClass);
+                        }else if(result.getInt(RESULT_CODE) == 1){
+                            Log.d("DEBUG", "In CommonJsonCallback: ->try Using default class");
+                            obj = new Gson().fromJson((String) responseObj, mDefaultClass);
+                        }
+                        if(obj != null){ //表明正确的转为了实体对象
                             mListener.onSuccess(obj);
-                        } else {
+                        }else{
                             mListener.onFailure(new OkHttpException(JSON_ERROR, EMPTY_MSG));
                         }
                     }
-                } else { //将服务端返回的异常回调到应用层去处理
+                }else{ //将服务端返回的异常回调到应用层去处理
                     mListener.onFailure(new OkHttpException(OTHER_ERROR, result.get(RESULT_CODE)));
                 }
             }
-        } catch (Exception e) {
+        }catch (Exception e){
             e.printStackTrace();
             mListener.onFailure(new OkHttpException(OTHER_ERROR, e.getMessage()));
         }

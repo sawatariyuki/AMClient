@@ -9,14 +9,16 @@ public class DisposeDataHandle {
 
     public DisposeDataListener mListener = null;
     public Class<?> mClass = null;
+    public Class<?> mDefaultClass = null;
 
     public DisposeDataHandle(DisposeDataListener listener) {
         this.mListener = listener;
     }
 
-    public DisposeDataHandle(DisposeDataListener listener, Class<?> clazz) {
+    public DisposeDataHandle(DisposeDataListener listener, Class<?> clazz, Class<?> defaultClazz) {
         this.mListener = listener;
         this.mClass = clazz;
+        this.mDefaultClass = defaultClazz;
     }
 
 }

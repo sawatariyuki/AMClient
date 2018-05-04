@@ -2,6 +2,8 @@ package com.gift.sawatariyuki.amclient;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.annotation.SuppressLint;
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
@@ -10,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.widget.Button;
@@ -18,8 +21,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gift.sawatariyuki.amclient.Bean.LoginResponse;
+import com.gift.sawatariyuki.amclient.ServerNetwork.RequestCenter;
 import com.gift.sawatariyuki.amclient.Utils.dataRecoder.DataRecorder;
+import com.gift.sawatariyuki.amclient.Utils.okHttp.listener.DisposeDataListener;
+import com.gift.sawatariyuki.amclient.Utils.okHttp.request.RequestParams;
 import com.gift.sawatariyuki.amclient.Utils.validation.NetworkValidation;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
     private Button left_drawer_BTN_login;
@@ -34,6 +43,8 @@ public class HomeActivity extends AppCompatActivity {
 
     private final int REQUESTCODE = 101;
 
+    private String username = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,11 +54,6 @@ public class HomeActivity extends AppCompatActivity {
         recorder = new DataRecorder(this);
         initListener();
         initData();
-
-        if(!NetworkValidation.isNetworkAvailable(this)){
-            Toast.makeText(HomeActivity.this, "no network available", Toast.LENGTH_SHORT).show();
-        }
-
     }
 
     private void initView() {
@@ -66,6 +72,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void initListener(){
+        //登录
         left_drawer_BTN_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -75,7 +82,9 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        //注册
         left_drawer_BTN_register.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("RestrictedApi")
             @Override
             public void onClick(View view) {
                 int X = (int) (left_drawer_BTN_register.getX()+left_drawer_BTN_register.getWidth()/2);
@@ -91,7 +100,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View view) {
                 long time = System.currentTimeMillis() - preTime;
                 if(time>2000){
-                    Toast.makeText(HomeActivity.this, "press again to logout", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(HomeActivity.this, "Press again to logout", Toast.LENGTH_SHORT).show();
                     preTime = System.currentTimeMillis();
                     return;
                 }
@@ -102,17 +111,41 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        //激活提示
+        left_drawer_TV_inactivate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(HomeActivity.this, "You must activate your account first", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void initData(){
-        String username = (String) recorder.get("loggedUsername","");
+        username = (String) recorder.get("loggedUsername","");
         if(username.equals("")){
             setVisibility(false);
         }else{
             if(!(Boolean) recorder.get("isActivated", false)){
                 left_drawer_TV_inactivate.setVisibility(View.VISIBLE);
-            }else{
+            }else{  //用户已激活
                 left_drawer_TV_inactivate.setVisibility(View.INVISIBLE);
+
+                //SEND GET REQUEST
+                RequestParams params = new RequestParams();
+                params.put("name", username);
+                RequestCenter.getEvent(new DisposeDataListener() {
+                    @Override
+                    public void onSuccess(Object responseObj) {
+
+                        Log.d("DEBUG", responseObj.toString());
+                        //TODO
+                    }
+
+                    @Override
+                    public void onFailure(Object responseObj) {
+
+                    }
+                }, params, HomeActivity.this);
             }
             setVisibility(true);
             left_drawer_TV_username.setText(username);
@@ -123,9 +156,10 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==REQUESTCODE && resultCode==201){
+        if(requestCode==REQUESTCODE && resultCode==201){    // 在主界面点击登录，在登录后返回主界面
             LoginResponse response = (LoginResponse) data.getSerializableExtra("response");
-            left_drawer_TV_username.setText(response.getData().getFields().getName());
+            username = response.getData().getFields().getName();
+            left_drawer_TV_username.setText(username);
             left_drawer_TV_email.setText(response.getData().getFields().getEmail());
             if(response.getData().getFields().getActivated()){
                 left_drawer_TV_inactivate.setVisibility(View.INVISIBLE);
@@ -133,15 +167,20 @@ public class HomeActivity extends AppCompatActivity {
                 left_drawer_TV_inactivate.setVisibility(View.VISIBLE);
             }
             setVisibility(true);
-        }else if(requestCode==REQUESTCODE && resultCode==202){
-            String name = data.getStringExtra("name");
+
+            //TODO
+
+        }else if(requestCode==REQUESTCODE && resultCode==202){  // 在主界面点击注册，在注册后返回主界面
+            username = data.getStringExtra("name");
             String email = data.getStringExtra("email");
-            left_drawer_TV_username.setText(name);
+            left_drawer_TV_username.setText(username);
             left_drawer_TV_email.setText(email);
             left_drawer_TV_inactivate.setVisibility(View.VISIBLE);
             setVisibility(true);
         }
     }
+
+
 
 
     /**

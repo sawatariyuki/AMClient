@@ -27,6 +27,7 @@ import com.gift.sawatariyuki.amclient.Utils.validation.NetworkValidation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 
 public class LoginActivity extends AppCompatActivity {
     private TextView activity_login_TV_name;
@@ -111,7 +112,7 @@ public class LoginActivity extends AppCompatActivity {
                 String username = activity_login_ET_name.getText().toString().trim();
                 String password = activity_login_ET_pw.getText().toString().trim();
                 if(password.length()<8){
-                    Toast.makeText(view.getContext(), "密码至少需要8位",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(view.getContext(), "Password needs 8 characters at least",Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if(activity_login_SW_remember.isChecked()){
@@ -122,10 +123,6 @@ public class LoginActivity extends AppCompatActivity {
                     recorder.save("isRemember", false);
                 }
                 //SEND POST REQUEST
-                if(!NetworkValidation.isNetworkAvailable(view.getContext())){
-                    Toast.makeText(LoginActivity.this, "no network available", Toast.LENGTH_SHORT).show();
-                    return;
-                }
                 RequestParams params = new RequestParams();
                 params.put("name", username);
                 params.put("pw", password);
@@ -151,7 +148,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onFailure(Object responseObj) {
 
                     }
-                }, params);
+                }, params, LoginActivity.this);
             }
         });
 
@@ -165,7 +162,7 @@ public class LoginActivity extends AppCompatActivity {
                 pairs.add(Pair.create((View)activity_login_TV_pw, "TV_pw"));
                 pairs.add(Pair.create((View)activity_login_ET_name, "ET_name"));
                 pairs.add(Pair.create((View)activity_login_ET_pw, "ET_pw"));
-                pairs.add(Pair.create((View)activity_login_BTN_register, "BTN"));
+                pairs.add(Pair.create((View)activity_login_BTN_register, "BTN_register"));
 
                 Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(LoginActivity.this, pairs.toArray(new Pair[]{})).toBundle();
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
@@ -177,7 +174,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==REQUESTCODE && resultCode==202){
+        if(requestCode==REQUESTCODE && resultCode==202){    // 在登录界面点击注册，注册后返回登录界面
             String name = data.getStringExtra("name");
             String pw = data.getStringExtra("pw");
             activity_login_ET_name.setText(name);

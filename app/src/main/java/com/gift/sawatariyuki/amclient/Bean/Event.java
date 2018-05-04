@@ -2,11 +2,11 @@ package com.gift.sawatariyuki.amclient.Bean;
 
 import java.io.Serializable;
 
-public class UserDefault implements Serializable {
+public class Event implements Serializable{
     private int pk;
-    private UserDefaultFields fields;
+    private EventFields fields;
 
-    public UserDefault(int pk, UserDefaultFields fields) {
+    public Event(int pk, EventFields fields) {
         this.pk = pk;
         this.fields = fields;
     }
@@ -19,20 +19,19 @@ public class UserDefault implements Serializable {
         this.pk = pk;
     }
 
-    public UserDefaultFields getFields() {
+    public EventFields getFields() {
         return fields;
     }
 
-    public void setFields(UserDefaultFields fields) {
+    public void setFields(EventFields fields) {
         this.fields = fields;
     }
 
     @Override
     public String toString() {
-        return "UserDefault{" +
+        return "Event{" +
                 "pk=" + pk +
                 ", fields=" + fields +
                 '}';
     }
-
 }

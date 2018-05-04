@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
                                     + responseObj.toString());
                             MAIN_TV_RESLUT.setText("onFailure");
                         }
-                    }, params);
+                    }, params, MainActivity.this);
                 }else{
                     String urlStr = "http://" + MAIN_ED_URL.getText().toString();
                     OkHttpClient okHttpClient = new OkHttpClient();
@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
                                 + responseObj.toString());
                         MAIN_TV_RESLUT.setText("onFailure");
                     }
-                }, params);
+                }, params, MainActivity.this);
             }
         });
 

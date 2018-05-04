@@ -59,12 +59,6 @@ public class RegisterActivity extends AppCompatActivity {
         activity_register_ET_email = findViewById(R.id.activity_register_ET_email);
         activity_register_BTN_register = findViewById(R.id.activity_register_BTN_register);
         activity_register_BTN_cancel = findViewById(R.id.activity_register_BTN_cancel);
-
-        activity_register_TV_name.setTransitionName("TV_name");
-        activity_register_TV_pw.setTransitionName("TV_pw");
-        activity_register_ET_name.setTransitionName("ET_name");
-        activity_register_ET_pw.setTransitionName("ET_pw");
-        activity_register_BTN_register.setTransitionName("BTN");
     }
 
     private void initListener(){
@@ -96,25 +90,21 @@ public class RegisterActivity extends AppCompatActivity {
                 final String pw = activity_register_ET_pw.getText().toString().trim();
                 String pwConfirm = activity_register_ET_pw_confirm.getText().toString().trim();
                 if(!pw.equals(pwConfirm)){
-                    Toast.makeText(RegisterActivity.this, "两次密码不一致", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "Two passwords are inconsistent", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if(pw.length()<8){
-                    Toast.makeText(RegisterActivity.this, "密码至少需要8位", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "Password needs 8 characters at least", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 final String email = activity_register_ET_email.getText().toString().trim();
                 if(!InputValidation.isEmail(email)){
-                    Toast.makeText(RegisterActivity.this, "邮箱格式不正确", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "Incorrect format for email", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 final String name = activity_register_ET_name.getText().toString().trim();
 
                 //SEND POST REQUEST
-                if(!NetworkValidation.isNetworkAvailable(view.getContext())){
-                    Toast.makeText(RegisterActivity.this, "no network available", Toast.LENGTH_SHORT).show();
-                    return;
-                }
                 RequestParams params = new RequestParams();
                 params.put("name", name);
                 params.put("pw", pw);
@@ -144,7 +134,7 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onFailure(Object responseObj) {
 
                     }
-                }, params);
+                }, params, RegisterActivity.this);
             }
         });
 
