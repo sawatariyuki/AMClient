@@ -6,7 +6,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class EventFields implements Serializable {
-    private int userDefault;
     private String title;
     private String description;
     private int eventType;
@@ -20,8 +19,7 @@ public class EventFields implements Serializable {
     private int sysLevel;
     private int state;
 
-    public EventFields(int userDefault, String title, String description, int eventType, String ctime, int userLevel, String userStartTime, String userEndTime, int length, String sysStartTime, String sysEndTime, int sysLevel, int state) {
-        this.userDefault = userDefault;
+    public EventFields(String title, String description, int eventType, String ctime, int userLevel, String userStartTime, String userEndTime, int length, String sysStartTime, String sysEndTime, int sysLevel, int state) {
         this.title = title;
         this.description = description;
         this.eventType = eventType;
@@ -31,22 +29,14 @@ public class EventFields implements Serializable {
         this.state = state;
 
         try {
-            this.ctime = SimpleDateFormat.getDateInstance().parse(ctime);
-            this.userStartTime = SimpleDateFormat.getDateInstance().parse(userStartTime);
-            this.userEndTime = SimpleDateFormat.getDateInstance().parse(userEndTime);
-            this.sysStartTime = SimpleDateFormat.getDateInstance().parse(sysStartTime);
-            this.sysEndTime = SimpleDateFormat.getDateInstance().parse(sysEndTime);
+            this.ctime = SimpleDateFormat.getDateTimeInstance().parse(ctime);
+            this.userStartTime = SimpleDateFormat.getDateTimeInstance().parse(userStartTime);
+            this.userEndTime = SimpleDateFormat.getDateTimeInstance().parse(userEndTime);
+            this.sysStartTime = SimpleDateFormat.getDateTimeInstance().parse(sysStartTime);
+            this.sysEndTime = SimpleDateFormat.getDateTimeInstance().parse(sysEndTime);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-    }
-
-    public int getUserDefault() {
-        return userDefault;
-    }
-
-    public void setUserDefault(int userDefault) {
-        this.userDefault = userDefault;
     }
 
     public String getTitle() {
@@ -148,8 +138,7 @@ public class EventFields implements Serializable {
     @Override
     public String toString() {
         return "EventFields{" +
-                "userDefault=" + userDefault +
-                ", title='" + title + '\'' +
+                "title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", eventType=" + eventType +
                 ", ctime=" + ctime +

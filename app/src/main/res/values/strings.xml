@@ -10,6 +10,11 @@
     <!--left drawer-->
     <string name="inactivate">Account is inactivated</string>
 
+
+    <!--home activity-->
+    <string name="no_event_data">There is no event data.</string>
+
+
     <!--login activity-->
     <string name="username">Username</string>
     <string name="username_hint">input your username</string>
@@ -23,4 +28,5 @@
     <string name="email">Email</string>
     <string name="email_hint">input your email</string>
     <string name="cancel">Cancel</string>
+
 </resources>

@@ -10,21 +10,13 @@
         android:id="@+id/activity_login_TV_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="24dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:text="@string/username"
         android:textColor="@color/colorPinkMain"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline6"
+        app:layout_constraintBottom_toTopOf="@+id/activity_login_TV_pw"
         app:layout_constraintEnd_toStartOf="@+id/guideline7" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.3" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline7"
@@ -37,14 +29,13 @@
         android:id="@+id/activity_login_TV_pw"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="16dp"
         android:text="@string/password"
         android:textColor="@color/colorPinkMain"
         android:textSize="20sp"
-        app:layout_constraintEnd_toStartOf="@+id/guideline7"
-        app:layout_constraintTop_toTopOf="@+id/guideline6" />
+        app:layout_constraintBottom_toTopOf="@+id/activity_login_SW_remember"
+        app:layout_constraintEnd_toStartOf="@+id/guideline7" />
 
     <EditText
         android:id="@+id/activity_login_ET_pw"
@@ -76,33 +67,32 @@
         android:id="@+id/activity_login_SW_remember"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:layout_marginEnd="48dp"
-        android:layout_marginRight="48dp"
-        android:layout_marginTop="32dp"
         android:text="@string/remember"
         android:textColor="@color/colorPinkMain"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_login_ET_pw" />
+        app:layout_constraintBottom_toTopOf="@+id/guideline9"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
         android:id="@+id/activity_login_BTN_login"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="48dp"
         android:background="@color/colorPinkMain"
         android:text="@string/login"
         android:textColor="@color/white"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/guideline8"
-        app:layout_constraintTop_toBottomOf="@+id/activity_login_ET_pw" />
+        app:layout_constraintTop_toTopOf="@+id/guideline9" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5" />
+        app:layout_constraintGuide_percent="0.50364965" />
 
     <Button
         android:id="@+id/activity_login_BTN_register"
@@ -116,6 +106,15 @@
         android:textStyle="bold"
         app:layout_constraintBaseline_toBaselineOf="@+id/activity_login_BTN_login"
         app:layout_constraintEnd_toStartOf="@+id/guideline8" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.55"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </android.support.constraint.ConstraintLayout>

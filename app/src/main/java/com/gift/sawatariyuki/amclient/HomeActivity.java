@@ -3,16 +3,17 @@ package com.gift.sawatariyuki.amclient;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
-import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Handler;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.OrientationHelper;
+import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.util.Log;
-import android.util.Pair;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.widget.Button;
@@ -20,14 +21,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gift.sawatariyuki.amclient.Adapter.RecyclerViewAdapterForEvent;
+import com.gift.sawatariyuki.amclient.Bean.DefaultResponse;
+import com.gift.sawatariyuki.amclient.Bean.Event;
+import com.gift.sawatariyuki.amclient.Bean.GetEventResponse;
+import com.gift.sawatariyuki.amclient.Bean.GetTypeResponse;
 import com.gift.sawatariyuki.amclient.Bean.LoginResponse;
+import com.gift.sawatariyuki.amclient.Bean.Type;
+import com.gift.sawatariyuki.amclient.Listener.OnItemClickListener;
+import com.gift.sawatariyuki.amclient.Listener.OnItemLongClickListener;
 import com.gift.sawatariyuki.amclient.ServerNetwork.RequestCenter;
 import com.gift.sawatariyuki.amclient.Utils.dataRecoder.DataRecorder;
 import com.gift.sawatariyuki.amclient.Utils.okHttp.listener.DisposeDataListener;
 import com.gift.sawatariyuki.amclient.Utils.okHttp.request.RequestParams;
-import com.gift.sawatariyuki.amclient.Utils.validation.NetworkValidation;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
@@ -39,11 +46,19 @@ public class HomeActivity extends AppCompatActivity {
     private TextView left_drawer_TV_inactivate;
     private ImageView left_drawer_IV_transition;
     private ImageView left_drawer_IV_exit;
+    private ConstraintLayout left_drawer_CL;
+    private RecyclerView activity_home_RV_event;
+    private TextView activity_home_TV_noEventData;
+
     private DataRecorder recorder;
 
     private final int REQUESTCODE = 101;
 
     private String username = null;
+
+    private List<Event> events = null;
+    private List<Type> types = null;
+    private RecyclerViewAdapterForEvent adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +69,7 @@ public class HomeActivity extends AppCompatActivity {
         recorder = new DataRecorder(this);
         initListener();
         initData();
+
     }
 
     private void initView() {
@@ -66,9 +82,14 @@ public class HomeActivity extends AppCompatActivity {
         left_drawer_TV_inactivate = findViewById(R.id.left_drawer_TV_inactivate);
         left_drawer_IV_transition = findViewById(R.id.left_drawer_IV_transition);
         left_drawer_IV_exit = findViewById(R.id.left_drawer_IV_exit);
+        left_drawer_CL = findViewById(R.id.left_drawer_CL);
 
         // main
-
+        activity_home_RV_event = findViewById(R.id.activity_home_RV_event);
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        activity_home_RV_event.setLayoutManager(layoutManager);
+        layoutManager.setOrientation(OrientationHelper.VERTICAL);
+        activity_home_TV_noEventData = findViewById(R.id.activity_home_TV_noEventData);
     }
 
     private void initListener(){
@@ -107,7 +128,11 @@ public class HomeActivity extends AppCompatActivity {
                 recorder.remove("loggedUsername");
                 recorder.remove("email");
                 recorder.remove("isActivated");
-                setVisibility(false);
+
+                setVisibilityInLeftDrawer(false);
+
+                //no event data
+                setVisibilityInHomeActivity(false);
             }
         });
 
@@ -118,40 +143,33 @@ public class HomeActivity extends AppCompatActivity {
                 Toast.makeText(HomeActivity.this, "You must activate your account first", Toast.LENGTH_SHORT).show();
             }
         });
+
+        //事务 点击事件
+
+
     }
 
     private void initData(){
         username = (String) recorder.get("loggedUsername","");
         if(username.equals("")){
-            setVisibility(false);
+            setVisibilityInLeftDrawer(false);
+            setVisibilityInHomeActivity(false);
         }else{
             if(!(Boolean) recorder.get("isActivated", false)){
                 left_drawer_TV_inactivate.setVisibility(View.VISIBLE);
             }else{  //用户已激活
                 left_drawer_TV_inactivate.setVisibility(View.INVISIBLE);
-
-                //SEND GET REQUEST
-                RequestParams params = new RequestParams();
-                params.put("name", username);
-                RequestCenter.getEvent(new DisposeDataListener() {
-                    @Override
-                    public void onSuccess(Object responseObj) {
-
-                        Log.d("DEBUG", responseObj.toString());
-                        //TODO
-                    }
-
-                    @Override
-                    public void onFailure(Object responseObj) {
-
-                    }
-                }, params, HomeActivity.this);
+                //获取用户事务信息并显示在RecyclerView中
+                getEventData();
             }
-            setVisibility(true);
+
+            setVisibilityInLeftDrawer(true);
             left_drawer_TV_username.setText(username);
             left_drawer_TV_email.setText((String)recorder.get("email",""));
         }
     }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -163,25 +181,96 @@ public class HomeActivity extends AppCompatActivity {
             left_drawer_TV_email.setText(response.getData().getFields().getEmail());
             if(response.getData().getFields().getActivated()){
                 left_drawer_TV_inactivate.setVisibility(View.INVISIBLE);
+                //获取用户事务信息并显示在RecyclerView中
+                getEventData();
             }else{
                 left_drawer_TV_inactivate.setVisibility(View.VISIBLE);
             }
-            setVisibility(true);
-
-            //TODO
-
+            setVisibilityInLeftDrawer(true);
         }else if(requestCode==REQUESTCODE && resultCode==202){  // 在主界面点击注册，在注册后返回主界面
             username = data.getStringExtra("name");
             String email = data.getStringExtra("email");
             left_drawer_TV_username.setText(username);
             left_drawer_TV_email.setText(email);
             left_drawer_TV_inactivate.setVisibility(View.VISIBLE);
-            setVisibility(true);
+            setVisibilityInLeftDrawer(true);
+
+            //no event data
+            setVisibilityInHomeActivity(false);
         }
     }
 
 
+    private void getEventData(){
+        final OnItemClickListener onItemClickListener = new OnItemClickListener() {
+            @Override
+            public void onItemClick(Object itemValue, int position) {
+                Toast.makeText(HomeActivity.this, "you click the "+position+"th item", Toast.LENGTH_SHORT).show();
+            }
+        };
+        final OnItemLongClickListener onItemLongClickListener = new OnItemLongClickListener() {
+            @Override
+            public void onItemLongClick(Object itemValue, int position) {
+                Event event = (Event) itemValue;
+                Toast.makeText(HomeActivity.this, event.toString(), Toast.LENGTH_SHORT).show();
+            }
+        };
 
+        //SEND GET REQUEST
+        //获取用户事务
+        RequestParams params = new RequestParams();
+        params.put("name", username);
+        RequestCenter.getEvent(new DisposeDataListener() {
+            @Override
+            public void onSuccess(Object responseObj) {
+                if(responseObj instanceof GetEventResponse){
+                    GetEventResponse response = (GetEventResponse) responseObj;
+                    events = response.getData();
+                    if(types != null){
+                        setVisibilityInHomeActivity(true);
+                        adapter = new RecyclerViewAdapterForEvent(events, types);
+                        activity_home_RV_event.setAdapter(adapter);
+                        adapter.setOnItemClickListener(onItemClickListener);
+                        adapter.setOnItemLongClickListener(onItemLongClickListener);
+                    }
+                }else if(responseObj instanceof DefaultResponse){
+                    //no event data
+                    setVisibilityInHomeActivity(false);
+                }
+            }
+
+            @Override
+            public void onFailure(Object responseObj) {
+
+            }
+        }, params, HomeActivity.this);
+
+        //获取用户事务类型
+        RequestCenter.getType(new DisposeDataListener() {
+            @Override
+            public void onSuccess(Object responseObj) {
+                if(responseObj instanceof GetTypeResponse){
+                    GetTypeResponse response = (GetTypeResponse) responseObj;
+                    types = response.getData();
+                    if(events != null){
+                        setVisibilityInHomeActivity(true);
+                        adapter = new RecyclerViewAdapterForEvent(events, types);
+                        activity_home_RV_event.setAdapter(adapter);
+                        adapter.setOnItemClickListener(onItemClickListener);
+                        adapter.setOnItemLongClickListener(onItemLongClickListener);
+                    }
+                }else if(responseObj instanceof DefaultResponse){
+                    //no event data
+                    setVisibilityInHomeActivity(false);
+                }
+            }
+
+            @Override
+            public void onFailure(Object responseObj) {
+
+            }
+        }, params, HomeActivity.this);
+    }
 
     /**
      * 圆形扩散转场动画
@@ -222,20 +311,29 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    private void setVisibility(Boolean isLogin){
+    private void setVisibilityInLeftDrawer(Boolean isLogin){
         if(isLogin){    //has logged in
             left_drawer_BTN_login.setVisibility(View.GONE);
             left_drawer_BTN_register.setVisibility(View.GONE);
-            left_drawer_TV_username.setVisibility(View.VISIBLE);
-            left_drawer_TV_email.setVisibility(View.VISIBLE);
-            left_drawer_IV_exit.setVisibility(View.VISIBLE);
+
+            left_drawer_CL.setVisibility(View.VISIBLE);
         }else{
             left_drawer_BTN_login.setVisibility(View.VISIBLE);
             left_drawer_BTN_register.setVisibility(View.VISIBLE);
-            left_drawer_TV_username.setVisibility(View.GONE);
-            left_drawer_TV_email.setVisibility(View.GONE);
-            left_drawer_IV_exit.setVisibility(View.INVISIBLE);
-            left_drawer_TV_inactivate.setVisibility(View.INVISIBLE);
+
+            left_drawer_CL.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void setVisibilityInHomeActivity(Boolean hasEventData){
+        if(hasEventData){
+            activity_home_RV_event.setVisibility(View.VISIBLE);
+            activity_home_TV_noEventData.setVisibility(View.INVISIBLE);
+        }else{
+            activity_home_RV_event.setVisibility(View.INVISIBLE);
+            activity_home_TV_noEventData.setVisibility(View.VISIBLE);
+            events = null;
+            types = null;
         }
     }
 }

@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import com.gift.sawatariyuki.amclient.Bean.DefaultResponse;
 import com.gift.sawatariyuki.amclient.Bean.GetEventResponse;
+import com.gift.sawatariyuki.amclient.Bean.GetTypeResponse;
 import com.gift.sawatariyuki.amclient.Bean.LoginResponse;
 import com.gift.sawatariyuki.amclient.Bean.UserDefaultList;
 import com.gift.sawatariyuki.amclient.LoginActivity;
@@ -61,6 +62,10 @@ public class RequestCenter {
         RequestCenter.getRequest(ServerApi.getUserEvent, params, context, listener, GetEventResponse.class, DefaultResponse.class);
     }
 
+    public static void getType(DisposeDataListener listener, RequestParams params, Context context){
+        Log.d("DEBUG", "In RequestCenter: ->getType " + ServerApi.getUserEventType);
+        RequestCenter.getRequest(ServerApi.getUserEventType, params, context, listener, GetTypeResponse.class, DefaultResponse.class);
+    }
 
     //---------------------------------------------------------------------------------------------
 

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="4dp">
+
+    <TextView
+        android:id="@+id/rv_event_item_TV_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:lines="1"
+        android:text="titletitletitletitletitletitle"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/rv_event_item_TV_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:lines="1"
+        android:text="thisisdescriptionthisisdescription"
+        android:textColor="@color/colorPinkMain"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rv_event_item_TV_title" />
+
+    <TextView
+        android:id="@+id/rv_event_item_TV_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:text="type"
+        android:textColor="@color/colorPinkMain"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/rv_event_item_TV_description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/rv_event_item_TV_startTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="startTime"
+        android:textColor="@color/colorPinkMain"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rv_event_item_TV_description" />
+
+    <TextView
+        android:id="@+id/rv_event_item_TV_endTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="endTime"
+        android:textColor="@color/colorPinkMain"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/rv_event_item_TV_startTime"
+        app:layout_constraintTop_toBottomOf="@+id/rv_event_item_TV_description" />
+
+    <TextView
+        android:id="@+id/rv_event_item_TV_length"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:text="length"
+        android:textColor="@color/colorPinkMain"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toStartOf="@+id/rv_event_item_TV_state"
+        app:layout_constraintTop_toBottomOf="@+id/rv_event_item_TV_description" />
+
+    <TextView
+        android:id="@+id/rv_event_item_TV_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:text="等待安排"
+        android:textColor="@color/colorPinkMain"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rv_event_item_TV_description" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:background="@color/colorPrimaryDark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rv_event_item_TV_endTime" />
+</android.support.constraint.ConstraintLayout>
