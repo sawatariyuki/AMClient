@@ -1,5 +1,7 @@
 package com.gift.sawatariyuki.amclient.Bean;
 
+import com.gift.sawatariyuki.amclient.Utils.TimeZoneChanger;
+
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,12 +24,8 @@ public class UserDefaultFields implements Serializable {
         this.isActivated = isActivated;
         this.activateCode = activateCode;
 
-        try {
-            this.date_joined = SimpleDateFormat.getDateInstance().parse(date_joined);
-            this.last_joined = SimpleDateFormat.getDateInstance().parse(last_joined);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        this.date_joined = TimeZoneChanger.StringUTCToDateLocal(date_joined);
+        this.last_joined = TimeZoneChanger.StringUTCToDateLocal(last_joined);
     }
 
     public String getName() {

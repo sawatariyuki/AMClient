@@ -1,5 +1,7 @@
 package com.gift.sawatariyuki.amclient.Bean;
 
+import com.gift.sawatariyuki.amclient.Utils.TimeZoneChanger;
+
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -19,12 +21,9 @@ public class TypeFields implements Serializable {
         this.userTimes = userTimes;
         this.emergencyLevel = emergencyLevel;
 
-        try {
-            this.ctime = SimpleDateFormat.getDateTimeInstance().parse(ctime);
-            this.last_used = SimpleDateFormat.getDateTimeInstance().parse(last_used);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        this.ctime = TimeZoneChanger.StringUTCToDateLocal(ctime);
+        this.last_used = TimeZoneChanger.StringUTCToDateLocal(last_used);
+
     }
 
     public String getName() {

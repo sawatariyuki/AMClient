@@ -1,7 +1,8 @@
 package com.gift.sawatariyuki.amclient.Bean;
 
+import com.gift.sawatariyuki.amclient.Utils.TimeZoneChanger;
+
 import java.io.Serializable;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -28,15 +29,12 @@ public class EventFields implements Serializable {
         this.sysLevel = sysLevel;
         this.state = state;
 
-        try {
-            this.ctime = SimpleDateFormat.getDateTimeInstance().parse(ctime);
-            this.userStartTime = SimpleDateFormat.getDateTimeInstance().parse(userStartTime);
-            this.userEndTime = SimpleDateFormat.getDateTimeInstance().parse(userEndTime);
-            this.sysStartTime = SimpleDateFormat.getDateTimeInstance().parse(sysStartTime);
-            this.sysEndTime = SimpleDateFormat.getDateTimeInstance().parse(sysEndTime);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        this.ctime = TimeZoneChanger.StringUTCToDateLocal(ctime);
+        this.userStartTime = TimeZoneChanger.StringUTCToDateLocal(userStartTime);
+        this.userEndTime = TimeZoneChanger.StringUTCToDateLocal(userEndTime);
+        this.sysStartTime = TimeZoneChanger.StringUTCToDateLocal(sysStartTime);
+        this.sysEndTime = TimeZoneChanger.StringUTCToDateLocal(sysEndTime);
+
     }
 
     public String getTitle() {

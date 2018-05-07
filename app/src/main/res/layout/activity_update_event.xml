@@ -4,15 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddEventActivity">
+    tools:context=".UpdateEventActivity">
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/constraintLayout2"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
         android:focusable="true"
         android:focusableInTouchMode="true"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -36,7 +34,6 @@
             android:layout_height="match_parent"
             android:layout_marginStart="8dp"
             android:background="@color/colorPrimaryDark"
-            app:layout_constraintBottom_toBottomOf="@+id/activity_addevent_BTN_reset"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -141,8 +138,8 @@
             android:layout_marginStart="16dp"
             android:ems="10"
             android:hint="@string/title_hint"
-            android:lines="1"
             android:textColor="@color/colorPinkMain"
+            android:lines="1"
             app:layout_constraintBaseline_toBaselineOf="@+id/textView4"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textView4" />
@@ -152,29 +149,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="@string/start_time_hint"
-            android:lines="1"
+            android:hint="@string/end_time_hint"
             android:textColor="@color/colorPinkMain"
+            android:lines="1"
             app:layout_constraintBaseline_toBaselineOf="@+id/textView8"
-            app:layout_constraintStart_toStartOf="@+id/activity_addevent_ET_title"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:inputType="none"
-            />
+            app:layout_constraintStart_toStartOf="@+id/activity_addevent_ET_title" />
 
         <EditText
             android:id="@+id/activity_addevent_ET_end"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:ems="10"
-            android:lines="1"
-            android:hint="@string/end_time_hint"
             android:textColor="@color/colorPinkMain"
+            android:lines="1"
             app:layout_constraintBaseline_toBaselineOf="@+id/textView9"
-            app:layout_constraintStart_toStartOf="@+id/activity_addevent_ET_start"
-            android:inputType="none"
-            android:focusable="false"
-            android:focusableInTouchMode="false"/>
+            app:layout_constraintStart_toStartOf="@+id/activity_addevent_ET_start" />
 
         <EditText
             android:id="@+id/activity_addevent_ET_description"
@@ -204,119 +193,14 @@
             android:layout_marginTop="8dp"
             android:ems="4"
             android:hint="@string/length_hint"
+            android:textSize="16sp"
+            android:textColor="@color/colorPinkMain"
             android:inputType="numberDecimal"
             android:lines="1"
-            android:textColor="@color/colorPinkMain"
-            android:textSize="16sp"
-            android:gravity="center_horizontal"
             app:layout_constraintBottom_toBottomOf="@+id/activity_addevent_ET_end"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/activity_addevent_ET_start"
             app:layout_constraintTop_toTopOf="@+id/activity_addevent_ET_start" />
-
-        <Button
-            android:id="@+id/activity_addevent_BTN_submit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:background="@color/colorPinkMain"
-            android:text="@string/submit"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/guideline12"
-            app:layout_constraintTop_toBottomOf="@+id/activity_addevent_ET_end" />
-
-        <android.support.constraint.Guideline
-            android:id="@+id/guideline12"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.5" />
-
-        <Button
-            android:id="@+id/activity_addevent_BTN_reset"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:text="@string/reset"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            android:background="@color/colorPinkMain"
-            app:layout_constraintBaseline_toBaselineOf="@+id/activity_addevent_BTN_submit"
-            app:layout_constraintEnd_toStartOf="@+id/guideline12" />
-
-        <android.support.v7.widget.AppCompatSpinner
-            android:id="@+id/activity_addevent_type_selector"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:background="@null"
-            android:gravity="center_vertical"
-            android:spinnerMode="dropdown"
-            app:layout_constraintBottom_toBottomOf="@+id/textView6"
-            app:layout_constraintStart_toEndOf="@+id/textView6"
-            app:layout_constraintTop_toTopOf="@+id/textView6">
-
-        </android.support.v7.widget.AppCompatSpinner>
-
-        <RadioGroup
-            android:id="@+id/activity_addevent_emergency"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="@+id/textView7"
-            app:layout_constraintStart_toEndOf="@+id/textView7"
-            app:layout_constraintTop_toTopOf="@+id/textView7">
-
-            <RadioButton
-                android:id="@+id/activity_addevent_emergency_0"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:layout_marginEnd="8dp"
-                android:textColor="@color/colorPinkMain" />
-
-            <RadioButton
-                android:id="@+id/activity_addevent_emergency_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="1"
-                android:layout_marginEnd="8dp"
-                android:textColor="@color/colorPinkMain"/>
-
-            <RadioButton
-                android:id="@+id/activity_addevent_emergency_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="2"
-                android:layout_marginEnd="8dp"
-                android:textColor="@color/colorPinkMain"/>
-
-            <RadioButton
-                android:id="@+id/activity_addevent_emergency_3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="3"
-                android:textColor="@color/colorPinkMain"/>
-
-        </RadioGroup>
-
-        <TextView
-            android:id="@+id/activity_addevent_TV_addtype"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginStart="8dp"
-            android:background="@drawable/shape_round_textview"
-            android:gravity="center"
-            android:text="@string/add"
-            android:textColor="@color/white"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/activity_addevent_type_selector"
-            app:layout_constraintStart_toEndOf="@+id/activity_addevent_type_selector"
-            app:layout_constraintTop_toTopOf="@+id/activity_addevent_type_selector" />
 
 
     </android.support.constraint.ConstraintLayout>
@@ -326,33 +210,38 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.1" />
+        app:layout_constraintGuide_percent="0.2" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.05" />
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/activity_addevent_CL_header"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/colorPinkMain"
-        app:layout_constraintBottom_toTopOf="@+id/guideline10"
+        app:layout_constraintBottom_toTopOf="@+id/guideline11"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/colorPinkMain">
 
         <TextView
             android:id="@+id/activity_addevent_TV_back"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="8dp"
             android:gravity="center"
             android:text="@string/back"
             android:textColor="@color/white"
-            android:textSize="24sp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </android.support.constraint.ConstraintLayout>
-
-
-
 </android.support.constraint.ConstraintLayout>

@@ -48,25 +48,24 @@ public class RequestCenter {
     }
 
     public static void login_POST(DisposeDataListener listener, RequestParams params, Context context){
-//        Log.d("DEBUG", "In RequestCenter: ->login_POST " + ServerApi.login);
         RequestCenter.postRequest(ServerApi.login, params, context, listener, LoginResponse.class, DefaultResponse.class);
     }
 
     public static void registerUser(DisposeDataListener listener, RequestParams params, Context context){
-//        Log.d("DEBUG", "In RequestCenter: ->registerUser " + ServerApi.register);
         RequestCenter.postRequest(ServerApi.register, params, context, listener, DefaultResponse.class, DefaultResponse.class);
     }
 
     public static void getEvent(DisposeDataListener listener, RequestParams params, Context context){
-//        Log.d("DEBUG", "In RequestCenter: ->getUserEvent " + ServerApi.getUserEvent);
-        RequestCenter.getRequest(ServerApi.getUserEvent, params, context, listener, GetEventResponse.class, DefaultResponse.class);
+        RequestCenter.getRequest(ServerApi.getEvent, params, context, listener, GetEventResponse.class, DefaultResponse.class);
     }
 
     public static void getType(DisposeDataListener listener, RequestParams params, Context context){
-//        Log.d("DEBUG", "In RequestCenter: ->getType " + ServerApi.getUserEventType);
-        RequestCenter.getRequest(ServerApi.getUserEventType, params, context, listener, GetTypeResponse.class, DefaultResponse.class);
+        RequestCenter.getRequest(ServerApi.getEventType, params, context, listener, GetTypeResponse.class, DefaultResponse.class);
     }
 
+    public static void addEvent(DisposeDataListener listener, RequestParams params, Context context){
+        RequestCenter.postRequest(ServerApi.addEvent, params, context, listener, DefaultResponse.class, DefaultResponse.class);
+    }
     //---------------------------------------------------------------------------------------------
 
     public static void activateUser_GET(DisposeDataListener listener, RequestParams params, Context context){

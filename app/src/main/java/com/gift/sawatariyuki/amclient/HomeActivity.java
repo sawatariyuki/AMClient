@@ -37,6 +37,7 @@ import com.gift.sawatariyuki.amclient.Utils.dataRecoder.DataRecorder;
 import com.gift.sawatariyuki.amclient.Utils.okHttp.listener.DisposeDataListener;
 import com.gift.sawatariyuki.amclient.Utils.okHttp.request.RequestParams;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
@@ -65,6 +66,7 @@ public class HomeActivity extends AppCompatActivity {
     String stateStr[] = {"4", "5", "0", "1", "2", "3"};
     int statePosition[] = {2, 3, 4, 5, 0, 1};
     private String selectedState = null;
+    Boolean isLogin;
 
     private RecyclerViewAdapterForEvent adapter;
 
@@ -138,6 +140,7 @@ public class HomeActivity extends AppCompatActivity {
                     preTime = System.currentTimeMillis();
                     return;
                 }
+                username = null;
                 recorder.remove("loggedUsername");
                 recorder.remove("email");
                 recorder.remove("isActivated");
@@ -145,7 +148,7 @@ public class HomeActivity extends AppCompatActivity {
                 setVisibilityInLeftDrawer(false);
 
                 //no event data
-                setVisibilityInHomeActivity(false);
+                setVisibilityInHomeActivity(false, false);
             }
         });
 
@@ -163,8 +166,10 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedState = stateStr[position];
-                recorder.save("selectedEventState", selectedState);
-                getEventData();
+                if(isLogin) {
+                    recorder.save("selectedEventState", selectedState);
+                    getEventData();
+                }
             }
 
             @Override
@@ -179,9 +184,11 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(types==null){
                     //TODO 提示用户要先添加事务类型
+                    Toast.makeText(HomeActivity.this, "提示用户要先添加事务类型", Toast.LENGTH_SHORT).show();
                 }else {
                     Intent intent = new Intent(HomeActivity.this, AddEventActivity.class);
                     intent.putExtra("name", username);
+                    intent.putExtra("types", (Serializable) types);
                     startActivityForResult(intent, REQUESTCODE);
 
                     //TODO
@@ -198,7 +205,7 @@ public class HomeActivity extends AppCompatActivity {
         selectedState = (String) recorder.get("selectedEventState", "4");
         if(username.equals("")){
             setVisibilityInLeftDrawer(false);
-            setVisibilityInHomeActivity(false);
+            setVisibilityInHomeActivity(false, false);
         }else{
             if(!(Boolean) recorder.get("isActivated", false)){
                 left_drawer_TV_inactivate.setVisibility(View.VISIBLE);
@@ -241,9 +248,12 @@ public class HomeActivity extends AppCompatActivity {
             setVisibilityInLeftDrawer(true);
 
             //no event data
-            setVisibilityInHomeActivity(false);
+            setVisibilityInHomeActivity(false, false);
+        }else if(requestCode==REQUESTCODE && resultCode==301){
+            activity_home_state_selector.setSelection(2);
+            getEventData();
         }
-        //TODO
+
     }
 
 
@@ -274,7 +284,7 @@ public class HomeActivity extends AppCompatActivity {
                     GetEventResponse response = (GetEventResponse) responseObj;
                     events = response.getData();
                     if(types != null){
-                        setVisibilityInHomeActivity(true);
+                        setVisibilityInHomeActivity(true, true);
                         adapter = new RecyclerViewAdapterForEvent(events, types, HomeActivity.this);
                         activity_home_RV_event.setAdapter(adapter);
                         adapter.setOnItemClickListener(onItemClickListener);
@@ -282,7 +292,11 @@ public class HomeActivity extends AppCompatActivity {
                     }
                 }else if(responseObj instanceof DefaultResponse){
                     //no event data
-                    setVisibilityInHomeActivity(false);
+                    if(types != null){
+                        setVisibilityInHomeActivity(false, true);
+                    }else{
+                        setVisibilityInHomeActivity(false, false);
+                    }
                 }
             }
 
@@ -300,15 +314,15 @@ public class HomeActivity extends AppCompatActivity {
                     GetTypeResponse response = (GetTypeResponse) responseObj;
                     types = response.getData();
                     if(events != null){
-                        setVisibilityInHomeActivity(true);
+                        setVisibilityInHomeActivity(true, true);
                         adapter = new RecyclerViewAdapterForEvent(events, types, HomeActivity.this);
                         activity_home_RV_event.setAdapter(adapter);
                         adapter.setOnItemClickListener(onItemClickListener);
                         adapter.setOnItemLongClickListener(onItemLongClickListener);
                     }
                 }else if(responseObj instanceof DefaultResponse){
-                    //no event data
-                    setVisibilityInHomeActivity(false);
+                    //no type data
+                    setVisibilityInHomeActivity(false, false);
                 }
             }
 
@@ -359,20 +373,19 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void setVisibilityInLeftDrawer(Boolean isLogin){
+        this.isLogin = isLogin;
         if(isLogin){    //has logged in
             left_drawer_BTN_login.setVisibility(View.GONE);
             left_drawer_BTN_register.setVisibility(View.GONE);
-
             left_drawer_CL.setVisibility(View.VISIBLE);
         }else{
             left_drawer_BTN_login.setVisibility(View.VISIBLE);
             left_drawer_BTN_register.setVisibility(View.VISIBLE);
-
             left_drawer_CL.setVisibility(View.INVISIBLE);
         }
     }
 
-    private void setVisibilityInHomeActivity(Boolean hasEventData){
+    private void setVisibilityInHomeActivity(Boolean hasEventData, Boolean hasTypeData){
         if(hasEventData){
             activity_home_RV_event.setVisibility(View.VISIBLE);
             activity_home_TV_noEventData.setVisibility(View.INVISIBLE);
@@ -380,6 +393,8 @@ public class HomeActivity extends AppCompatActivity {
             activity_home_RV_event.setVisibility(View.INVISIBLE);
             activity_home_TV_noEventData.setVisibility(View.VISIBLE);
             events = null;
+        }
+        if(!hasTypeData){
             types = null;
         }
     }
