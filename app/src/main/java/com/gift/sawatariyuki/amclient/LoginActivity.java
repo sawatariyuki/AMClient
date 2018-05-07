@@ -18,6 +18,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gift.sawatariyuki.amclient.Bean.DefaultResponse;
 import com.gift.sawatariyuki.amclient.Bean.LoginResponse;
 import com.gift.sawatariyuki.amclient.ServerNetwork.RequestCenter;
 import com.gift.sawatariyuki.amclient.Utils.dataRecoder.DataRecorder;
@@ -129,19 +130,26 @@ public class LoginActivity extends AppCompatActivity {
                 RequestCenter.login_POST(new DisposeDataListener() {
                     @Override
                     public void onSuccess(Object responseObj) {
-                        LoginResponse response = (LoginResponse) responseObj;
-                        String msg = response.getMsg();
-                        Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
-
-                        if(msg.equals("登陆成功") || msg.equals("请先激活用户")){
-                            recorder.save("loggedUsername", response.getData().getFields().getName());
-                            recorder.save("email", response.getData().getFields().getEmail());
-                            recorder.save("isActivated", response.getData().getFields().getActivated());
-                            Intent data = new Intent();
-                            data.putExtra("response", response);
-                            setResult(201, data);
-                            finish();
+                        if(responseObj instanceof LoginResponse){
+                            LoginResponse response = (LoginResponse) responseObj;
+                            String msg = response.getMsg();
+                            Toast.makeText(LoginActivity.this, response.getMsg(), Toast.LENGTH_SHORT).show();
+                            if(msg.equals("登陆成功") || msg.equals("请先激活用户")){
+                                recorder.save("loggedUsername", response.getData().getFields().getName());
+                                recorder.save("email", response.getData().getFields().getEmail());
+                                recorder.save("isActivated", response.getData().getFields().getActivated());
+                                Intent data = new Intent();
+                                data.putExtra("response", response);
+                                setResult(201, data);
+                                finish();
+                            }
+                        }else if(responseObj instanceof DefaultResponse){
+                            DefaultResponse response = (DefaultResponse) responseObj;
+                            Toast.makeText(LoginActivity.this, response.getMsg(), Toast.LENGTH_SHORT).show();
                         }
+
+
+
                     }
 
                     @Override

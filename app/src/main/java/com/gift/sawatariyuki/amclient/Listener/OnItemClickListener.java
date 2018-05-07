@@ -1,5 +1,5 @@
 package com.gift.sawatariyuki.amclient.Listener;
 
-public interface OnItemClickListener<V> {
-    void onItemClick(V itemValue, int position);
+public interface OnItemClickListener<T> {
+    void onItemClick(T itemValue, int position);
 }

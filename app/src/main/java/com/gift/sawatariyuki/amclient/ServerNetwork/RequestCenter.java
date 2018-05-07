@@ -48,40 +48,40 @@ public class RequestCenter {
     }
 
     public static void login_POST(DisposeDataListener listener, RequestParams params, Context context){
-        Log.d("DEBUG", "In RequestCenter: ->login_POST " + ServerApi.login);
+//        Log.d("DEBUG", "In RequestCenter: ->login_POST " + ServerApi.login);
         RequestCenter.postRequest(ServerApi.login, params, context, listener, LoginResponse.class, DefaultResponse.class);
     }
 
     public static void registerUser(DisposeDataListener listener, RequestParams params, Context context){
-        Log.d("DEBUG", "In RequestCenter: ->registerUser " + ServerApi.register);
+//        Log.d("DEBUG", "In RequestCenter: ->registerUser " + ServerApi.register);
         RequestCenter.postRequest(ServerApi.register, params, context, listener, DefaultResponse.class, DefaultResponse.class);
     }
 
     public static void getEvent(DisposeDataListener listener, RequestParams params, Context context){
-        Log.d("DEBUG", "In RequestCenter: ->getUserEvent " + ServerApi.getUserEvent);
+//        Log.d("DEBUG", "In RequestCenter: ->getUserEvent " + ServerApi.getUserEvent);
         RequestCenter.getRequest(ServerApi.getUserEvent, params, context, listener, GetEventResponse.class, DefaultResponse.class);
     }
 
     public static void getType(DisposeDataListener listener, RequestParams params, Context context){
-        Log.d("DEBUG", "In RequestCenter: ->getType " + ServerApi.getUserEventType);
+//        Log.d("DEBUG", "In RequestCenter: ->getType " + ServerApi.getUserEventType);
         RequestCenter.getRequest(ServerApi.getUserEventType, params, context, listener, GetTypeResponse.class, DefaultResponse.class);
     }
 
     //---------------------------------------------------------------------------------------------
 
     public static void activateUser_GET(DisposeDataListener listener, RequestParams params, Context context){
-        Log.d("DEBUG", "In RequestCenter: ->activateUser_GET " + ServerApi.activate_GET);
+//        Log.d("DEBUG", "In RequestCenter: ->activateUser_GET " + ServerApi.activate_GET);
         RequestCenter.getRequest(ServerApi.activate_GET, params, context, listener, DefaultResponse.class, DefaultResponse.class);
     }
 
     public static void activateUser_POST(DisposeDataListener listener, RequestParams params, Context context){
-        Log.d("DEBUG", "In RequestCenter: ->activateUser_POST " + ServerApi.activate_POST);
+//        Log.d("DEBUG", "In RequestCenter: ->activateUser_POST " + ServerApi.activate_POST);
         RequestCenter.postRequest(ServerApi.activate_POST, params, context, listener, DefaultResponse.class, DefaultResponse.class);
     }
 
 
     public static void getAllUser(DisposeDataListener listener, Context context){
-        Log.d("DEBUG", "In RequestCenter: ->getAllUser " + ServerApi.getAll);
+//        Log.d("DEBUG", "In RequestCenter: ->getAllUser " + ServerApi.getAll);
         RequestCenter.getRequest(ServerApi.getAll, null, context, listener, UserDefaultList.class, DefaultResponse.class);
     }
 }

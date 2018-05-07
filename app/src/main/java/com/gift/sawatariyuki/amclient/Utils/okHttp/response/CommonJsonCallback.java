@@ -74,15 +74,13 @@ public class CommonJsonCallback implements Callback{
 
     // 处理成功的响应
     private void handleResponse(Object responseObj){
-        Log.d("DEBUG", "In CommonJsonCallback: " + responseObj.toString());
 
-        if(responseObj == null && responseObj.toString().trim().equals("")){
+        if(responseObj == null || responseObj.toString().trim().equals("")){
             mListener.onFailure(new OkHttpException(NETWORK_ERROR, EMPTY_MSG));
             return;
         }
         try{
             JSONObject result = new JSONObject(responseObj.toString());
-            Log.d("DEBUG", "In CommonJsonCallback: ->try" + result.toString());
             if(result.has(RESULT_CODE)){
                 //从JSON对象中取出我们的响应码，如果不为666，则是正确的响应
                 if(result.getInt(RESULT_CODE) != RESULT_ERROR_CODE_VALUE){

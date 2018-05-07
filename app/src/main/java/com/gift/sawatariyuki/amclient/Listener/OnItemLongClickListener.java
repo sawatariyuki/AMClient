@@ -1,5 +1,5 @@
 package com.gift.sawatariyuki.amclient.Listener;
 
-public interface OnItemLongClickListener<V> {
-    void onItemLongClick(V itemValue, int position);
+public interface OnItemLongClickListener<T> {
+    void onItemLongClick(T itemValue, int position);
 }
