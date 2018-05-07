@@ -147,9 +147,6 @@ public class LoginActivity extends AppCompatActivity {
                             DefaultResponse response = (DefaultResponse) responseObj;
                             Toast.makeText(LoginActivity.this, response.getMsg(), Toast.LENGTH_SHORT).show();
                         }
-
-
-
                     }
 
                     @Override

@@ -10,10 +10,12 @@
     <!--left drawer-->
     <string name="inactivate">Account is inactivated</string>
 
-
     <!--home activity-->
     <string name="no_event_data">There is no event data.</string>
-
+    <string name="state_selector">STATE</string>
+    <string name="state_selector_title">SELECT AN EVENT STATE</string>
+    <string name="add">＋</string>
+    <string name="add_event">Add</string>
 
     <!--login activity-->
     <string name="username">Username</string>
@@ -28,5 +30,19 @@
     <string name="email">Email</string>
     <string name="email_hint">input your email</string>
     <string name="cancel">Cancel</string>
+
+    <!--add event activity-->
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="type">Type</string>
+    <string name="emergency">Emergency</string>
+    <string name="start_time">Start</string>
+    <string name="end_time">End</string>
+
+    <string name="title_hint">input event title</string>
+    <string name="description_hint">input event description</string>
+    <string name="start_time_hint">choose a start time</string>
+    <string name="end_time_hint">choose an end time</string>
+    <string name="length_hint">minutes</string>
 
 </resources>

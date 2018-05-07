@@ -101,4 +101,6 @@ public class DataRecorder {
  * username     LoginActivity中记住的用户名
  *
  * password     LoginActivity中记住的密码
+ *
+ * selectedEventState   HomeActivity中的事务的state
  */

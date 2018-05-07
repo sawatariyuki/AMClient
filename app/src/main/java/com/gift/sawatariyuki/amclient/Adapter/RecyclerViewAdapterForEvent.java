@@ -1,5 +1,7 @@
 package com.gift.sawatariyuki.amclient.Adapter;
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -21,14 +23,16 @@ import java.util.List;
 public class RecyclerViewAdapterForEvent extends RecyclerView.Adapter<ViewHolderForEvent> {
     private List<Event> events;
     private List<Type> types;
-    private static String STATE[] = {"等待安排", "已安排", " 已取消", " 已完成"};
+    private static String STATE[] = {"等待安排", "已安排", "已取消", "已完成"};
+    private Context context;
 
     private OnItemClickListener<Event> onItemClickListener;
     private OnItemLongClickListener<Event> onItemLongClickListener;
 
-    public RecyclerViewAdapterForEvent(List<Event> events, List<Type> types){
+    public RecyclerViewAdapterForEvent(List<Event> events, List<Type> types, Context context){
         this.events = events;
         this.types = types;
+        this.context = context;
     }
 
 
@@ -47,6 +51,16 @@ public class RecyclerViewAdapterForEvent extends RecyclerView.Adapter<ViewHolder
         holder.getRv_event_item_TV_description().setText(event.getFields().getDescription());
         holder.getRv_event_item_TV_length().setText(event.getFields().getLength()+"min");
         holder.getRv_event_item_TV_state().setText(STATE[event.getFields().getState()]);
+        if(event.getFields().getState()==0){    //等待安排 的颜色
+            holder.getRv_event_item_TV_state().setTextColor(context.getResources().getColor(R.color.orange));
+        }else if(event.getFields().getState()==1){  //已安排 的颜色
+            holder.getRv_event_item_TV_state().setTextColor(context.getResources().getColor(R.color.dark_pink));
+        }else if(event.getFields().getState()==2){  //已取消 的颜色
+            holder.getRv_event_item_TV_state().setTextColor(context.getResources().getColor(R.color.gray));
+        }else{  //已完成 的颜色
+            holder.getRv_event_item_TV_state().setTextColor(context.getResources().getColor(R.color.black));
+        }
+
         for (Type type: types) {
             if(type.getPk() == event.getFields().getEventType()){
                 holder.getRv_event_item_TV_type().setText(type.getFields().getName());

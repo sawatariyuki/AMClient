@@ -16,8 +16,10 @@ import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewAnimationUtils;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,15 +51,21 @@ public class HomeActivity extends AppCompatActivity {
     private ConstraintLayout left_drawer_CL;
     private RecyclerView activity_home_RV_event;
     private TextView activity_home_TV_noEventData;
+    private Spinner activity_home_state_selector;
+    private ConstraintLayout activity_home_CL_addEvent;
 
     private DataRecorder recorder;
 
     private final int REQUESTCODE = 101;
 
+    //全局变量
     private String username = null;
-
     private List<Event> events = null;
     private List<Type> types = null;
+    String stateStr[] = {"4", "5", "0", "1", "2", "3"};
+    int statePosition[] = {2, 3, 4, 5, 0, 1};
+    private String selectedState = null;
+
     private RecyclerViewAdapterForEvent adapter;
 
     @Override
@@ -65,8 +73,8 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        initView();
         recorder = new DataRecorder(this);
+        initView();
         initListener();
         initData();
 
@@ -90,6 +98,11 @@ public class HomeActivity extends AppCompatActivity {
         activity_home_RV_event.setLayoutManager(layoutManager);
         layoutManager.setOrientation(OrientationHelper.VERTICAL);
         activity_home_TV_noEventData = findViewById(R.id.activity_home_TV_noEventData);
+        activity_home_state_selector = findViewById(R.id.activity_home_state_selector);
+        int position = Integer.valueOf((String) recorder.get("selectedEventState", "4"));
+        activity_home_state_selector.setSelection(statePosition[position]);
+        activity_home_CL_addEvent = findViewById(R.id.activity_home_CL_addEvent);
+
     }
 
     private void initListener(){
@@ -144,13 +157,45 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        //事务 点击事件
+        //事务状态选择器
+        activity_home_state_selector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedState = stateStr[position];
+                recorder.save("selectedEventState", selectedState);
+                getEventData();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        //添加事件 +Add
+        activity_home_CL_addEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(types==null){
+                    //TODO 提示用户要先添加事务类型
+                }else {
+                    Intent intent = new Intent(HomeActivity.this, AddEventActivity.class);
+                    intent.putExtra("name", username);
+                    startActivityForResult(intent, REQUESTCODE);
+
+                    //TODO
+                }
+
+            }
+        });
 
     }
 
     private void initData(){
         username = (String) recorder.get("loggedUsername","");
+        //0:等待被安排 1:已安排 2:已取消 3:已完成 4:未完成 5:所有
+        selectedState = (String) recorder.get("selectedEventState", "4");
         if(username.equals("")){
             setVisibilityInLeftDrawer(false);
             setVisibilityInHomeActivity(false);
@@ -198,6 +243,7 @@ public class HomeActivity extends AppCompatActivity {
             //no event data
             setVisibilityInHomeActivity(false);
         }
+        //TODO
     }
 
 
@@ -220,6 +266,7 @@ public class HomeActivity extends AppCompatActivity {
         //获取用户事务
         RequestParams params = new RequestParams();
         params.put("name", username);
+        params.put("state", selectedState);
         RequestCenter.getEvent(new DisposeDataListener() {
             @Override
             public void onSuccess(Object responseObj) {
@@ -228,7 +275,7 @@ public class HomeActivity extends AppCompatActivity {
                     events = response.getData();
                     if(types != null){
                         setVisibilityInHomeActivity(true);
-                        adapter = new RecyclerViewAdapterForEvent(events, types);
+                        adapter = new RecyclerViewAdapterForEvent(events, types, HomeActivity.this);
                         activity_home_RV_event.setAdapter(adapter);
                         adapter.setOnItemClickListener(onItemClickListener);
                         adapter.setOnItemLongClickListener(onItemLongClickListener);
@@ -254,7 +301,7 @@ public class HomeActivity extends AppCompatActivity {
                     types = response.getData();
                     if(events != null){
                         setVisibilityInHomeActivity(true);
-                        adapter = new RecyclerViewAdapterForEvent(events, types);
+                        adapter = new RecyclerViewAdapterForEvent(events, types, HomeActivity.this);
                         activity_home_RV_event.setAdapter(adapter);
                         adapter.setOnItemClickListener(onItemClickListener);
                         adapter.setOnItemLongClickListener(onItemLongClickListener);
