@@ -8,33 +8,46 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 
+import com.gift.sawatariyuki.amclient.Bean.DefaultResponse;
 import com.gift.sawatariyuki.amclient.Bean.Event;
+import com.gift.sawatariyuki.amclient.Bean.LoginResponse;
 import com.gift.sawatariyuki.amclient.Bean.Type;
 import com.gift.sawatariyuki.amclient.Listener.OnItemClickListener;
 import com.gift.sawatariyuki.amclient.Listener.OnItemLongClickListener;
 import com.gift.sawatariyuki.amclient.R;
+import com.gift.sawatariyuki.amclient.ServerNetwork.RequestCenter;
+import com.gift.sawatariyuki.amclient.Utils.okHttp.listener.DisposeDataListener;
+import com.gift.sawatariyuki.amclient.Utils.okHttp.request.RequestParams;
 import com.gift.sawatariyuki.amclient.ViewHolder.ViewHolderForEvent;
 
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.List;
 
-public class RecyclerViewAdapterForEvent extends RecyclerView.Adapter<ViewHolderForEvent> {
+public class RecyclerViewAdapterForEvent extends RecyclerView.Adapter<ViewHolderForEvent> implements ItemTouchHelperAdapter {
     private List<Event> events;
     private List<Type> types;
+    private String username;
     private static String STATE[] = {"等待安排", "已安排", "已取消", "已完成"};
     private Context context;
 
     private OnItemClickListener<Event> onItemClickListener;
     private OnItemLongClickListener<Event> onItemLongClickListener;
 
-    public RecyclerViewAdapterForEvent(List<Event> events, List<Type> types, Context context){
+    public RecyclerViewAdapterForEvent(List<Event> events, List<Type> types, String username, Context context){
         this.events = events;
         this.types = types;
+        this.username = username;
         this.context = context;
     }
 
+    public void updateData(List<Event> events, List<Type> types){
+        this.events = events;
+        this.types = types;
+    }
 
     @NonNull
     @Override
@@ -124,4 +137,23 @@ public class RecyclerViewAdapterForEvent extends RecyclerView.Adapter<ViewHolder
         this.onItemLongClickListener = onItemLongClickListener;
     }
 
+    @Override
+    public void onItemDismiss(final int position) {
+        RequestParams params = new RequestParams();
+        params.put("name", username);
+        params.put("pk", String.valueOf(events.get(position).getPk()));
+        RequestCenter.deleteEvent(new DisposeDataListener() {
+            @Override
+            public void onSuccess(Object responseObj) {
+                DefaultResponse response = (DefaultResponse) responseObj;
+                Toast.makeText(context, response.getMsg(), Toast.LENGTH_SHORT).show();
+                events.remove(position);
+                notifyItemRemoved(position);
+            }
+            @Override
+            public void onFailure(Object responseObj) {
+
+            }
+        }, params, context);
+    }
 }

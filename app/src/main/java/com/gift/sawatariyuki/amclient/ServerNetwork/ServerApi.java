@@ -8,6 +8,7 @@ public class ServerApi {
     public static String getEvent = URL + "event/getEvent";
     public static String getEventType = URL + "event/getType";
     public static String addEvent = URL + "event/addEvent";
+    public static String deleteEvent = URL + "event/deleteEvent";
 
 
     public static String getAll = URL + "getAll";

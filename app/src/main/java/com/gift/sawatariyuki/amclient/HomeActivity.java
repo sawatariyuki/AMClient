@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewAnimationUtils;
@@ -24,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gift.sawatariyuki.amclient.Adapter.RecyclerViewAdapterForEvent;
+import com.gift.sawatariyuki.amclient.Adapter.SimpleItemTouchHelperCallback;
 import com.gift.sawatariyuki.amclient.Bean.DefaultResponse;
 import com.gift.sawatariyuki.amclient.Bean.Event;
 import com.gift.sawatariyuki.amclient.Bean.GetEventResponse;
@@ -69,6 +71,8 @@ public class HomeActivity extends AppCompatActivity {
     Boolean isLogin;
 
     private RecyclerViewAdapterForEvent adapter;
+    private ItemTouchHelper.Callback callback;
+    private ItemTouchHelper touchHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +83,7 @@ public class HomeActivity extends AppCompatActivity {
         initView();
         initListener();
         initData();
+
 
     }
 
@@ -256,7 +261,6 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-
     private void getEventData(){
         final OnItemClickListener onItemClickListener = new OnItemClickListener() {
             @Override
@@ -285,10 +289,23 @@ public class HomeActivity extends AppCompatActivity {
                     events = response.getData();
                     if(types != null){
                         setVisibilityInHomeActivity(true, true);
-                        adapter = new RecyclerViewAdapterForEvent(events, types, HomeActivity.this);
-                        activity_home_RV_event.setAdapter(adapter);
-                        adapter.setOnItemClickListener(onItemClickListener);
-                        adapter.setOnItemLongClickListener(onItemLongClickListener);
+                        if(adapter==null){
+                            adapter = new RecyclerViewAdapterForEvent(events, types, username, HomeActivity.this);
+                            activity_home_RV_event.setAdapter(adapter);
+                            adapter.setOnItemClickListener(onItemClickListener);
+                            adapter.setOnItemLongClickListener(onItemLongClickListener);
+                        }else{
+                            adapter.updateData(events, types);
+                            adapter.notifyDataSetChanged();
+                        }
+                        if(callback==null){
+                            //先实例化Callback
+                            callback = new SimpleItemTouchHelperCallback(adapter);
+                            //用Callback构造ItemTouchHelper
+                            touchHelper = new ItemTouchHelper(callback);
+                            //调用ItemTouchHelper的attachToRecyclerView方法建立联系
+                            touchHelper.attachToRecyclerView(activity_home_RV_event);
+                        }
                     }
                 }else if(responseObj instanceof DefaultResponse){
                     //no event data
@@ -315,10 +332,23 @@ public class HomeActivity extends AppCompatActivity {
                     types = response.getData();
                     if(events != null){
                         setVisibilityInHomeActivity(true, true);
-                        adapter = new RecyclerViewAdapterForEvent(events, types, HomeActivity.this);
-                        activity_home_RV_event.setAdapter(adapter);
-                        adapter.setOnItemClickListener(onItemClickListener);
-                        adapter.setOnItemLongClickListener(onItemLongClickListener);
+                        if(adapter==null){
+                            adapter = new RecyclerViewAdapterForEvent(events, types, username, HomeActivity.this);
+                            activity_home_RV_event.setAdapter(adapter);
+                            adapter.setOnItemClickListener(onItemClickListener);
+                            adapter.setOnItemLongClickListener(onItemLongClickListener);
+                        }else{
+                            adapter.updateData(events, types);
+                            adapter.notifyDataSetChanged();
+                        }
+                        if(callback==null){
+                            //先实例化Callback
+                            callback = new SimpleItemTouchHelperCallback(adapter);
+                            //用Callback构造ItemTouchHelper
+                            touchHelper = new ItemTouchHelper(callback);
+                            //调用ItemTouchHelper的attachToRecyclerView方法建立联系
+                            touchHelper.attachToRecyclerView(activity_home_RV_event);
+                        }
                     }
                 }else if(responseObj instanceof DefaultResponse){
                     //no type data
