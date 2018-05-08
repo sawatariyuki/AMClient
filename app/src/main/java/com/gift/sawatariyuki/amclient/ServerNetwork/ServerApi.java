@@ -1,7 +1,7 @@
 package com.gift.sawatariyuki.amclient.ServerNetwork;
 
 public class ServerApi {
-    private static final String URL = "http://yuki.pandaomeng.com:90/";
+    private static final String URL = "http://yuki.pandaomeng.com/";
 
     public static String login = URL + "user/loginPage";
     public static String register = URL + "user/register";
@@ -9,6 +9,7 @@ public class ServerApi {
     public static String getEventType = URL + "event/getType";
     public static String addEvent = URL + "event/addEvent";
     public static String deleteEvent = URL + "event/deleteEvent";
+    public static String cancelEvent = URL + "event/cancelEvent";
 
 
     public static String getAll = URL + "getAll";

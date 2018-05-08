@@ -34,4 +34,14 @@ public class TimeZoneChanger {
         }
         return time;
     }
+
+    public static String DateLocalTOStringLocalCN(Date timeDate){
+        String time = SimpleDateFormat.getDateTimeInstance().format(timeDate);
+        return time;
+    }
+
+    public static String DateLocalTOStringLocalEN(Date timeDate){
+        String time = (String) android.text.format.DateFormat.format("yyyy-MM-dd HH:mm", timeDate);
+        return time;
+    }
 }

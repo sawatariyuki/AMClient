@@ -3,18 +3,23 @@ package com.gift.sawatariyuki.amclient;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
+import android.app.ActivityOptions;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.DisplayMetrics;
+import android.util.Pair;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.widget.AdapterView;
@@ -38,8 +43,11 @@ import com.gift.sawatariyuki.amclient.ServerNetwork.RequestCenter;
 import com.gift.sawatariyuki.amclient.Utils.dataRecoder.DataRecorder;
 import com.gift.sawatariyuki.amclient.Utils.okHttp.listener.DisposeDataListener;
 import com.gift.sawatariyuki.amclient.Utils.okHttp.request.RequestParams;
+import com.gift.sawatariyuki.amclient.ViewHolder.ViewHolderForEvent;
+import com.melnykov.fab.FloatingActionButton;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
@@ -53,9 +61,13 @@ public class HomeActivity extends AppCompatActivity {
     private ImageView left_drawer_IV_exit;
     private ConstraintLayout left_drawer_CL;
     private RecyclerView activity_home_RV_event;
+    private LinearLayoutManager layoutManager;
     private TextView activity_home_TV_noEventData;
     private Spinner activity_home_state_selector;
-    private ConstraintLayout activity_home_CL_addEvent;
+    private ConstraintLayout activity_home_CL_user;
+    private TextView activity_home_TV_state;
+
+    private FloatingActionButton activity_home_fab;
 
     private DataRecorder recorder;
 
@@ -65,10 +77,10 @@ public class HomeActivity extends AppCompatActivity {
     private String username = null;
     private List<Event> events = null;
     private List<Type> types = null;
-    String stateStr[] = {"4", "5", "0", "1", "2", "3"};
-    int statePosition[] = {2, 3, 4, 5, 0, 1};
+    private String stateStr[] = {"4", "5", "0", "1", "2", "3"};
+    private int statePosition[] = {2, 3, 4, 5, 0, 1};
     private String selectedState = null;
-    Boolean isLogin;
+    private Boolean isLogin;
 
     private RecyclerViewAdapterForEvent adapter;
     private ItemTouchHelper.Callback callback;
@@ -101,15 +113,18 @@ public class HomeActivity extends AppCompatActivity {
 
         // main
         activity_home_RV_event = findViewById(R.id.activity_home_RV_event);
-        final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager = new LinearLayoutManager(this);
         activity_home_RV_event.setLayoutManager(layoutManager);
         layoutManager.setOrientation(OrientationHelper.VERTICAL);
         activity_home_TV_noEventData = findViewById(R.id.activity_home_TV_noEventData);
         activity_home_state_selector = findViewById(R.id.activity_home_state_selector);
         int position = Integer.valueOf((String) recorder.get("selectedEventState", "4"));
         activity_home_state_selector.setSelection(statePosition[position]);
-        activity_home_CL_addEvent = findViewById(R.id.activity_home_CL_addEvent);
+        activity_home_CL_user = findViewById(R.id.activity_home_CL_user);
+        activity_home_TV_state = findViewById(R.id.activity_home_TV_state);
 
+        activity_home_fab = findViewById(R.id.activity_home_fab);
+        activity_home_fab.attachToRecyclerView(activity_home_RV_event);
     }
 
     private void initListener(){
@@ -183,8 +198,38 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        //打开侧边栏
+        activity_home_CL_user.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity_home_drawerLayout.openDrawer(Gravity.LEFT);
+            }
+        });
+
+        //点击STATE刷新
+//        activity_home_TV_state.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                getEventData();
+//            }
+//        });
+
+        //TODO 测试点击用户名切换模式
+        left_drawer_TV_username.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int mode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+                if (mode == Configuration.UI_MODE_NIGHT_YES) {
+                    getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                } else if (mode == Configuration.UI_MODE_NIGHT_NO) {
+                    getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                }
+                recreate();
+            }
+        });
+
         //添加事件 +Add
-        activity_home_CL_addEvent.setOnClickListener(new View.OnClickListener() {
+        activity_home_fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(types==null){
@@ -195,12 +240,10 @@ public class HomeActivity extends AppCompatActivity {
                     intent.putExtra("name", username);
                     intent.putExtra("types", (Serializable) types);
                     startActivityForResult(intent, REQUESTCODE);
-
-                    //TODO
                 }
-
             }
         });
+
 
     }
 
@@ -219,7 +262,6 @@ public class HomeActivity extends AppCompatActivity {
                 //获取用户事务信息并显示在RecyclerView中
                 getEventData();
             }
-
             setVisibilityInLeftDrawer(true);
             left_drawer_TV_username.setText(username);
             left_drawer_TV_email.setText((String)recorder.get("email",""));
@@ -231,7 +273,7 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==REQUESTCODE && resultCode==201){    // 在主界面点击登录，在登录后返回主界面
+        if(requestCode==REQUESTCODE && resultCode==201){    //在主界面点击登录，在登录后返回主界面
             LoginResponse response = (LoginResponse) data.getSerializableExtra("response");
             username = response.getData().getFields().getName();
             left_drawer_TV_username.setText(username);
@@ -244,35 +286,62 @@ public class HomeActivity extends AppCompatActivity {
                 left_drawer_TV_inactivate.setVisibility(View.VISIBLE);
             }
             setVisibilityInLeftDrawer(true);
-        }else if(requestCode==REQUESTCODE && resultCode==202){  // 在主界面点击注册，在注册后返回主界面
+        }else if(requestCode==REQUESTCODE && resultCode==202){  //在主界面点击注册，在注册后返回主界面
             username = data.getStringExtra("name");
             String email = data.getStringExtra("email");
             left_drawer_TV_username.setText(username);
             left_drawer_TV_email.setText(email);
             left_drawer_TV_inactivate.setVisibility(View.VISIBLE);
             setVisibilityInLeftDrawer(true);
-
             //no event data
             setVisibilityInHomeActivity(false, false);
-        }else if(requestCode==REQUESTCODE && resultCode==301){
-            activity_home_state_selector.setSelection(2);
+        }else if(requestCode==REQUESTCODE && resultCode==301){  //在主界面点击添加事务，添加后返回主界面
+            activity_home_state_selector.setSelection(2);//切换STATE为Arranging
+            getEventData();
+        }else if(requestCode==REQUESTCODE && resultCode==401){  //取消事务后返回
             getEventData();
         }
-
     }
 
     private void getEventData(){
+        activity_home_fab.show();
         final OnItemClickListener onItemClickListener = new OnItemClickListener() {
+            @SuppressLint("RestrictedApi")
             @Override
             public void onItemClick(Object itemValue, int position) {
-                Toast.makeText(HomeActivity.this, "you click the "+position+"th item", Toast.LENGTH_SHORT).show();
+
             }
         };
+
         final OnItemLongClickListener onItemLongClickListener = new OnItemLongClickListener() {
+            @SuppressLint("RestrictedApi")
             @Override
             public void onItemLongClick(Object itemValue, int position) {
-                Event event = (Event) itemValue;
-                Toast.makeText(HomeActivity.this, event.toString(), Toast.LENGTH_SHORT).show();
+                List<Pair<View, String>> pairs = new ArrayList<Pair<View, String>>();
+                ViewHolderForEvent holder = (ViewHolderForEvent) activity_home_RV_event.findViewHolderForAdapterPosition(position);
+                View view = holder.getRv_event_item_CL();
+                pairs.add(Pair.create(view, "select_CL"));
+
+                view = holder.getRv_event_item_TV_title();
+                pairs.add(Pair.create(view, "selected_title"));
+                view = holder.getRv_event_item_TV_description();
+                pairs.add(Pair.create(view, "selected_description"));
+                view = holder.getRv_event_item_TV_startTime();
+                pairs.add(Pair.create(view, "selected_start"));
+                view = holder.getRv_event_item_TV_endTime();
+                pairs.add(Pair.create(view, "selected_end"));
+                view = holder.getRv_event_item_TV_type();
+                pairs.add(Pair.create(view, "selected_type"));
+                view = holder.getRv_event_item_TV_length();
+                pairs.add(Pair.create(view, "selected_length"));
+
+                Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(HomeActivity.this, pairs.toArray(new Pair[]{})).toBundle();
+                Intent intent = new Intent(HomeActivity.this, UpdateEventActivity.class);
+                intent.putExtra("name", username);
+                intent.putExtra("types", (Serializable) types);
+                intent.putExtra("events", (Serializable) events);
+                intent.putExtra("position", position);
+                startActivityForResult(intent, REQUESTCODE, bundle);
             }
         };
 
@@ -295,7 +364,7 @@ public class HomeActivity extends AppCompatActivity {
                             adapter.setOnItemClickListener(onItemClickListener);
                             adapter.setOnItemLongClickListener(onItemLongClickListener);
                         }else{
-                            adapter.updateData(events, types);
+                            adapter.updateData(events, types, username);
                             adapter.notifyDataSetChanged();
                         }
                         if(callback==null){
@@ -338,7 +407,7 @@ public class HomeActivity extends AppCompatActivity {
                             adapter.setOnItemClickListener(onItemClickListener);
                             adapter.setOnItemLongClickListener(onItemLongClickListener);
                         }else{
-                            adapter.updateData(events, types);
+                            adapter.updateData(events, types, username);
                             adapter.notifyDataSetChanged();
                         }
                         if(callback==null){

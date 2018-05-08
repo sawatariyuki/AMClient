@@ -70,6 +70,10 @@ public class RequestCenter {
     public static void deleteEvent(DisposeDataListener listener, RequestParams params, Context context) {
         RequestCenter.postRequest(ServerApi.deleteEvent, params, context, listener, DefaultResponse.class, DefaultResponse.class);
     }
+
+    public static void cancelOrReactiveEvent(DisposeDataListener listener, RequestParams params, Context context) {
+        RequestCenter.postRequest(ServerApi.cancelEvent, params, context, listener, DefaultResponse.class, DefaultResponse.class);
+    }
     //---------------------------------------------------------------------------------------------
 
     public static void activateUser_GET(DisposeDataListener listener, RequestParams params, Context context){

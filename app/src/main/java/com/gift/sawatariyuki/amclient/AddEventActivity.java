@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -28,10 +27,10 @@ import com.gift.sawatariyuki.amclient.ServerNetwork.RequestCenter;
 import com.gift.sawatariyuki.amclient.Utils.TimeZoneChanger;
 import com.gift.sawatariyuki.amclient.Utils.okHttp.listener.DisposeDataListener;
 import com.gift.sawatariyuki.amclient.Utils.okHttp.request.RequestParams;
+import com.melnykov.fab.FloatingActionButton;
 
 import java.io.Serializable;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 public class AddEventActivity extends AppCompatActivity {
@@ -53,6 +52,8 @@ public class AddEventActivity extends AppCompatActivity {
     private Spinner activity_addevent_type_selector;
     private RadioGroup activity_addevent_emergency;
 
+    private FloatingActionButton activity_addevent_fab;
+
     //全局变量
     private String username = null;
     private List<Type> types = null;
@@ -72,7 +73,7 @@ public class AddEventActivity extends AppCompatActivity {
         initView();
         initListener();
         initData();
-
+        ChangeColor(false, false);
     }
 
 
@@ -96,11 +97,13 @@ public class AddEventActivity extends AppCompatActivity {
         activity_addevent_emergency.check(R.id.activity_addevent_emergency_0);
 
         ChangeColor(false, false);
+
+        activity_addevent_fab = findViewById(R.id.activity_addevent_fab);
     }
 
     private void initListener() {
-        //左上角返回
-        activity_addevent_TV_back.setOnClickListener(new View.OnClickListener() {
+        //返回
+        activity_addevent_fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
@@ -126,6 +129,7 @@ public class AddEventActivity extends AppCompatActivity {
                         break;
                     default:
                         userLevel = 0;
+                        break;
                 }
             }
         });

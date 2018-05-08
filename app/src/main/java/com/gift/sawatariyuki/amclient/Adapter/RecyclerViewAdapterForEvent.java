@@ -3,11 +3,13 @@ package com.gift.sawatariyuki.amclient.Adapter;
 import android.content.Context;
 import android.content.res.Resources;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 
@@ -19,6 +21,7 @@ import com.gift.sawatariyuki.amclient.Listener.OnItemClickListener;
 import com.gift.sawatariyuki.amclient.Listener.OnItemLongClickListener;
 import com.gift.sawatariyuki.amclient.R;
 import com.gift.sawatariyuki.amclient.ServerNetwork.RequestCenter;
+import com.gift.sawatariyuki.amclient.Utils.TimeZoneChanger;
 import com.gift.sawatariyuki.amclient.Utils.okHttp.listener.DisposeDataListener;
 import com.gift.sawatariyuki.amclient.Utils.okHttp.request.RequestParams;
 import com.gift.sawatariyuki.amclient.ViewHolder.ViewHolderForEvent;
@@ -44,9 +47,10 @@ public class RecyclerViewAdapterForEvent extends RecyclerView.Adapter<ViewHolder
         this.context = context;
     }
 
-    public void updateData(List<Event> events, List<Type> types){
+    public void updateData(List<Event> events, List<Type> types, String username){
         this.events = events;
         this.types = types;
+        this.username = username;
     }
 
     @NonNull
@@ -84,17 +88,17 @@ public class RecyclerViewAdapterForEvent extends RecyclerView.Adapter<ViewHolder
         //其余状态显示系统安排的Time
         if(event.getFields().getState()==0 || event.getFields().getState()==2){
             holder.getRv_event_item_TV_startTime().setText(
-                    SimpleDateFormat.getDateTimeInstance().format(event.getFields().getUserStartTime())
+                    TimeZoneChanger.DateLocalTOStringLocalCN(event.getFields().getUserStartTime())
             );
             holder.getRv_event_item_TV_endTime().setText(
-                    SimpleDateFormat.getDateTimeInstance().format(event.getFields().getUserEndTime())
+                    TimeZoneChanger.DateLocalTOStringLocalCN(event.getFields().getUserEndTime())
             );
         }else{
             holder.getRv_event_item_TV_startTime().setText(
-                    SimpleDateFormat.getDateTimeInstance().format(event.getFields().getSysStartTime())
+                    TimeZoneChanger.DateLocalTOStringLocalCN(event.getFields().getSysStartTime())
             );
             holder.getRv_event_item_TV_endTime().setText(
-                    SimpleDateFormat.getDateTimeInstance().format(event.getFields().getSysEndTime())
+                    TimeZoneChanger.DateLocalTOStringLocalCN(event.getFields().getSysEndTime())
             );
         }
 
@@ -155,5 +159,10 @@ public class RecyclerViewAdapterForEvent extends RecyclerView.Adapter<ViewHolder
 
             }
         }, params, context);
+    }
+
+    public static void MoveToPosition(LinearLayoutManager manager, int n){
+        manager.scrollToPositionWithOffset(n, 0);
+        manager.setStackFromEnd(true);
     }
 }

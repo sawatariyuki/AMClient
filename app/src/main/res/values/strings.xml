@@ -15,7 +15,8 @@
     <string name="state_selector">STATE</string>
     <string name="state_selector_title">SELECT AN EVENT STATE</string>
     <string name="add">＋</string>
-    <string name="add_event">Add</string>
+    <string name="delete">Delete</string>
+    <string name="me">me!</string>
 
     <!--login activity-->
     <string name="username">Username</string>
@@ -46,5 +47,17 @@
     <string name="back">◀ Back</string>
     <string name="submit">Submit</string>
     <string name="reset">Reset</string>
+    <string name="add_event_info">Add Event</string>
+
+
+    <!--update event activity-->
+    <string name="update">UPDATE</string>
+    <string name="cancel_">CANCEL</string>
+    <string name="reactive_">REACTIVE</string>
+    <string name="delete_">DELETE</string>
+    <string name="recommend_time">Recommend</string>
+    <string name="to">To</string>
+    <string name="create">Create</string>
+    <string name="event_detail">Event Detail</string>
 
 </resources>
