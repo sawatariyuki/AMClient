@@ -24,6 +24,10 @@ public class TypeSelectorAdapter extends BaseAdapter implements SpinnerAdapter {
         this.context = context;
     }
 
+    public void updateData(List<Type> types){
+        this.types = types;
+    }
+
     @Override
     public int getCount() {
         return types.size();

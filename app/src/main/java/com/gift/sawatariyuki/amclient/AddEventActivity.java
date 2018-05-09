@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -24,6 +25,7 @@ import com.gift.sawatariyuki.amclient.Adapter.TypeSelectorAdapter;
 import com.gift.sawatariyuki.amclient.Bean.DefaultResponse;
 import com.gift.sawatariyuki.amclient.Bean.Type;
 import com.gift.sawatariyuki.amclient.ServerNetwork.RequestCenter;
+import com.gift.sawatariyuki.amclient.Utils.DateTimePicker;
 import com.gift.sawatariyuki.amclient.Utils.TimeZoneChanger;
 import com.gift.sawatariyuki.amclient.Utils.okHttp.listener.DisposeDataListener;
 import com.gift.sawatariyuki.amclient.Utils.okHttp.request.RequestParams;
@@ -36,7 +38,6 @@ import java.util.List;
 public class AddEventActivity extends AppCompatActivity {
 
     private TextView activity_addevent_TV_name;
-    private TextView activity_addevent_TV_back;
 
     private EditText activity_addevent_ET_title;
     private EditText activity_addevent_ET_description;
@@ -79,7 +80,6 @@ public class AddEventActivity extends AppCompatActivity {
 
     private void initView() {
         activity_addevent_TV_name = findViewById(R.id.activity_addevent_TV_name);
-        activity_addevent_TV_back = findViewById(R.id.activity_addevent_TV_back);
 
         activity_addevent_ET_title = findViewById(R.id.activity_addevent_ET_title);
         activity_addevent_ET_description =findViewById(R.id.activity_addevent_ET_description);
@@ -106,7 +106,7 @@ public class AddEventActivity extends AppCompatActivity {
         activity_addevent_fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                onBackPressed();
             }
         });
 
@@ -177,13 +177,13 @@ public class AddEventActivity extends AppCompatActivity {
         activity_addevent_ET_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DateTimePicker(activity_addevent_ET_start);
+                DateTimePicker.GetDateTimePicker(activity_addevent_ET_start, AddEventActivity.this);
             }
         });
         activity_addevent_ET_end.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DateTimePicker(activity_addevent_ET_end);
+                DateTimePicker.GetDateTimePicker(activity_addevent_ET_end, AddEventActivity.this);
             }
         });
 
@@ -206,7 +206,6 @@ public class AddEventActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(AddEventActivity.this, AddTypeActivity.class);
                 intent.putExtra("name", username);
-                intent.putExtra("types", (Serializable) types);
                 startActivityForResult(intent, REQUESTCODE);
             }
         });
@@ -225,11 +224,21 @@ public class AddEventActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==REQUESTCODE && resultCode==501){   //添加 事件类型 后返回到 添加事件 界面
+            types = (List<Type>) data.getSerializableExtra("types");
+            if(types == null){
+                onBackPressed();
+            }else{
+                adapter.updateData(types);
+                adapter.notifyDataSetChanged();
+            }
+        }
+    }
 
-        //TODO 添加 事件类型 后返回到 添加事件 界面
-//        if(requestCode==REQUESTCODE && resultCode==){
-//
-//        }
+    @Override
+    public void onBackPressed() {
+        setResult(301);
+        super.onBackPressed();
     }
 
     //重置
@@ -279,30 +288,6 @@ public class AddEventActivity extends AppCompatActivity {
             }
         }, params, AddEventActivity.this);
 
-    }
-
-    //日期时间选择器
-    private void DateTimePicker(final EditText editText){
-        final Calendar calendar = Calendar.getInstance();
-        DatePickerDialog datePickerDialog = new DatePickerDialog(AddEventActivity.this, new DatePickerDialog.OnDateSetListener() {
-
-            @Override
-            public void onDateSet(DatePicker view, final int year, final int month, final int dayOfMonth) {
-
-                calendar.set(year, month, dayOfMonth);
-                TimePickerDialog timePickerDialog = new TimePickerDialog(AddEventActivity.this, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        calendar.set(year, month, dayOfMonth, hourOfDay, minute);
-                        String time = (String) DateFormat.format("yyyy-MM-dd HH:mm", calendar);
-                        editText.setText(time);
-                        editText.setSelection(time.length());
-                    }
-                }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
-                timePickerDialog.show();
-            }
-        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
-        datePickerDialog.show();
     }
 
     private void checkValid(){

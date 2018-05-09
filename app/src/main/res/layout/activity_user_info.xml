@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UserInfoActivity">
+    tools:context=".UserInfoActivity"
+    android:background="@color/bg_color">
 
     <View
         android:id="@+id/view5"
@@ -29,11 +31,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="64dp"
         android:text="@string/username"
-        android:textStyle="bold"
         android:textColor="@color/colorPinkMain"
-        android:textSize="16sp"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/textView14"
         app:layout_constraintEnd_toStartOf="@+id/user_info_username"
         app:layout_constraintHorizontal_bias="0.5"
@@ -44,15 +46,13 @@
         android:id="@+id/user_info_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="64dp"
         android:layout_marginStart="32dp"
         android:text="username"
         android:textColor="@color/colorPinkDark"
-        android:textSize="14sp"
+        android:textSize="16sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/textView11"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/textView11" />
+        app:layout_constraintStart_toEndOf="@+id/textView11"
+        android:transitionName="left_drawer_username"/>
 
     <TextView
         android:id="@+id/textView14"
@@ -62,20 +62,20 @@
         android:text="@string/email"
         android:textStyle="bold"
         android:textColor="@color/colorPinkMain"
-        android:textSize="16sp"
+        android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/textView16"
         app:layout_constraintStart_toStartOf="@+id/textView11" />
 
     <TextView
-        android:id="@+id/user_info_emaill"
+        android:id="@+id/user_info_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
         android:text="email@email.email"
         android:textColor="@color/colorPinkDark"
-        android:textSize="14sp"
+        android:textSize="16sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/textView14"
-        app:layout_constraintStart_toEndOf="@+id/textView14" />
+        app:layout_constraintStart_toStartOf="@+id/user_info_joined"
+        android:transitionName="left_drawer_email"/>
 
     <TextView
         android:id="@+id/textView16"
@@ -85,9 +85,10 @@
         android:text="@string/joined"
         android:textStyle="bold"
         android:textColor="@color/colorPinkMain"
-        android:textSize="16sp"
+        android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/textView18"
-        app:layout_constraintStart_toStartOf="@+id/textView14" />
+        app:layout_constraintStart_toStartOf="@+id/textView14"
+        android:transitionName="left_drawer_join_"/>
 
     <TextView
         android:id="@+id/user_info_joined"
@@ -96,9 +97,10 @@
         android:layout_marginStart="32dp"
         android:text="2018-01-01 00:00"
         android:textColor="@color/colorPinkDark"
-        android:textSize="14sp"
+        android:textSize="16sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/textView16"
-        app:layout_constraintStart_toEndOf="@+id/textView16" />
+        app:layout_constraintStart_toEndOf="@+id/textView16"
+        android:transitionName="left_drawer_joined"/>
 
     <TextView
         android:id="@+id/textView18"
@@ -108,9 +110,10 @@
         android:text="@string/last_seen"
         android:textStyle="bold"
         android:textColor="@color/colorPinkMain"
-        android:textSize="16sp"
+        android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/view5"
-        app:layout_constraintStart_toStartOf="@+id/textView16" />
+        app:layout_constraintStart_toStartOf="@+id/textView16"
+        android:transitionName="left_drawer_lase_"/>
 
     <TextView
         android:id="@+id/user_info_last_seen"
@@ -118,7 +121,210 @@
         android:layout_height="wrap_content"
         android:text="2018-01-01 00:00"
         android:textColor="@color/colorPinkDark"
-        android:textSize="14sp"
+        android:textSize="16sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/textView18"
-        app:layout_constraintStart_toStartOf="@+id/user_info_joined" />
+        app:layout_constraintStart_toStartOf="@+id/user_info_joined"
+        android:transitionName="left_drawer_last"/>
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/gender"
+        android:textColor="@color/colorPinkMain"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/textView18"
+        app:layout_constraintTop_toTopOf="@+id/guideline" />
+
+    <TextView
+        android:id="@+id/textView15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/weight"
+        android:textColor="@color/colorPinkMain"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/textView13"
+        app:layout_constraintTop_toBottomOf="@+id/textView13" />
+
+    <TextView
+        android:id="@+id/textView17"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/birthday"
+        android:textColor="@color/colorPinkMain"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/textView15"
+        app:layout_constraintTop_toBottomOf="@+id/textView15" />
+
+    <TextView
+        android:id="@+id/textView19"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/age"
+        android:textColor="@color/colorPinkMain"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/user_info_TV_age"
+        app:layout_constraintTop_toBottomOf="@+id/textView17" />
+
+    <TextView
+        android:id="@+id/textView20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/birthplace"
+        android:textColor="@color/colorPinkMain"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/textView17"
+        app:layout_constraintTop_toBottomOf="@+id/textView19" />
+
+    <TextView
+        android:id="@+id/textView21"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/address"
+        android:textColor="@color/colorPinkMain"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/textView20"
+        app:layout_constraintTop_toBottomOf="@+id/textView20" />
+
+    <EditText
+        android:id="@+id/user_info_ET_birthplace"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="8"
+        android:inputType="text"
+        android:lines="1"
+        android:text=""
+        android:textColor="@color/colorPinkMain"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textView20"
+        app:layout_constraintStart_toStartOf="@+id/user_info_ET_birthday" />
+
+    <EditText
+        android:id="@+id/user_info_ET_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="8"
+        android:inputType="text"
+        android:lines="1"
+        android:text=""
+        android:textColor="@color/colorPinkMain"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textView21"
+        app:layout_constraintStart_toStartOf="@+id/user_info_ET_birthplace" />
+
+    <TextView
+        android:id="@+id/user_info_TV_age"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="20"
+        android:textColor="@color/colorPinkMain"
+        android:textSize="20sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textView19"
+        app:layout_constraintStart_toStartOf="@+id/user_info_ET_birthday" />
+
+    <EditText
+        android:id="@+id/user_info_ET_birthday"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:ems="8"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:inputType="none"
+        android:lines="1"
+        android:textColor="@color/colorPinkMain"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textView17"
+        app:layout_constraintStart_toStartOf="@+id/user_info_ET_weight" />
+
+    <EditText
+        android:id="@+id/user_info_ET_weight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="4"
+        android:hint="@string/weight_hint"
+        android:inputType="number|numberDecimal"
+        android:lines="1"
+        android:textColor="@color/colorPinkMain"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textView15"
+        app:layout_constraintStart_toStartOf="@+id/user_info_RG" />
+
+    <Button
+        android:id="@+id/user_info_BTN_submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="32dp"
+        android:background="@color/colorPinkMain"
+        android:text="@string/submit"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/user_info_ET_address"
+        app:layout_constraintTop_toBottomOf="@+id/user_info_ET_address" />
+
+    <ImageView
+        android:id="@+id/user_info_IV_reset"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="24dp"
+        android:background="@color/colorPinkMain"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view5"
+        app:srcCompat="@drawable/reset_img" />
+
+    <RadioGroup
+        android:id="@+id/user_info_RG"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="@+id/textView13"
+        app:layout_constraintStart_toEndOf="@+id/textView13"
+        app:layout_constraintTop_toTopOf="@+id/textView13" >
+
+        <RadioButton
+            android:id="@+id/user_info_RB_male"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/male"
+            android:textColor="@color/colorPinkMain"
+            tools:layout_editor_absoluteX="84dp"
+            tools:layout_editor_absoluteY="213dp"
+            android:layout_marginEnd="8dp"/>
+
+        <RadioButton
+            android:id="@+id/user_info_RB_female"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/female"
+            android:textColor="@color/colorPinkMain"
+            tools:layout_editor_absoluteX="84dp"
+            tools:layout_editor_absoluteY="213dp" />
+    </RadioGroup>
+
+    <com.melnykov.fab.FloatingActionButton
+        android:id="@+id/user_info_fab"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/back_img"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        fab:fab_colorNormal="@color/colorPinkMain"
+        fab:fab_colorPressed="@color/colorPinkDark"
+        fab:fab_colorRipple="@color/white" />
 </android.support.constraint.ConstraintLayout>

@@ -27,10 +27,10 @@
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:lines="1"
             android:text="thisisdescriptionthisisdescription"
             android:textColor="@color/colorPinkMain"
             android:textSize="16sp"
+            android:lines="1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/rv_event_item_TV_title" />

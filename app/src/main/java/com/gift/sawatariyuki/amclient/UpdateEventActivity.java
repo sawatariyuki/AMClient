@@ -128,7 +128,6 @@ public class UpdateEventActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setResult(401);
                 onBackPressed();
             }
         });
@@ -214,7 +213,6 @@ public class UpdateEventActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(UpdateEventActivity.this, AddTypeActivity.class);
                 intent.putExtra("name", username);
-                intent.putExtra("types", (Serializable) types);
                 startActivityForResult(intent, REQUESTCODE);
             }
         });
@@ -244,6 +242,26 @@ public class UpdateEventActivity extends AppCompatActivity {
                 showData();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(401);
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==REQUESTCODE && resultCode==501){   //添加 事件类型 后返回到 添加事件 界面
+            types = (List<Type>) data.getSerializableExtra("types");
+            if(types == null){
+                onBackPressed();
+            }else{
+                adapter.updateData(types);
+                adapter.notifyDataSetChanged();
+            }
+        }
     }
 
     //显示数据
@@ -285,7 +303,6 @@ public class UpdateEventActivity extends AppCompatActivity {
         TV_recommend_start.setText(TimeZoneChanger.DateLocalTOStringLocalEN(eventShowed.getFields().getSysStartTime()));
         TV_recommend_end.setText(TimeZoneChanger.DateLocalTOStringLocalEN(eventShowed.getFields().getSysEndTime()));
         TV_ctime.setText(TimeZoneChanger.DateLocalTOStringLocalEN(eventShowed.getFields().getCtime()));
-
 
         checkValid();
     }

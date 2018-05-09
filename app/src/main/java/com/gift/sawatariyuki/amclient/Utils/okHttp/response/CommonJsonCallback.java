@@ -80,6 +80,7 @@ public class CommonJsonCallback implements Callback{
             return;
         }
         try{
+            Log.d("DEBUG", responseObj.toString());
             JSONObject result = new JSONObject(responseObj.toString());
             if(result.has(RESULT_CODE)){
                 //从JSON对象中取出我们的响应码，如果不为666，则是正确的响应

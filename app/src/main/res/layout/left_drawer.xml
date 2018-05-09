@@ -5,7 +5,7 @@
     android:layout_width="320dp"
     android:layout_height="match_parent"
     android:layout_gravity="start"
-    android:background="@color/colorPrimaryDark"
+    android:background="@color/colorPinkMain"
     android:clickable="true"
     android:focusable="true">
 
@@ -70,8 +70,8 @@
     <android.support.constraint.ConstraintLayout
         android:id="@+id/left_drawer_CL"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/left_drawer_IV_nightMode"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -83,17 +83,6 @@
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.15" />
 
-        <TextView
-            android:id="@+id/sawatariyuki_NTS"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
-            android:layout_marginEnd="16dp"
-            android:text="@string/app_name_with_rights"
-            android:textColor="@color/white"
-            android:textSize="10sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
 
         <TextView
             android:id="@+id/left_drawer_TV_username"
@@ -161,13 +150,12 @@
             android:id="@+id/left_drawer_CL_userInfo"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/sawatariyuki_NTS"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view5">
 
             <TextView
-                android:id="@+id/textView10"
+                android:id="@+id/left_drawer_join_"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="48dp"
@@ -188,11 +176,11 @@
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="italic"
-                app:layout_constraintBottom_toBottomOf="@+id/textView10"
-                app:layout_constraintStart_toEndOf="@+id/textView10" />
+                app:layout_constraintBottom_toBottomOf="@+id/left_drawer_join_"
+                app:layout_constraintStart_toEndOf="@+id/left_drawer_join_" />
 
             <TextView
-                android:id="@+id/textView12"
+                android:id="@+id/left_drawer_lase_"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -200,8 +188,8 @@
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold|italic"
-                app:layout_constraintStart_toStartOf="@+id/textView10"
-                app:layout_constraintTop_toBottomOf="@+id/textView10" />
+                app:layout_constraintStart_toStartOf="@+id/left_drawer_join_"
+                app:layout_constraintTop_toBottomOf="@+id/left_drawer_join_" />
 
             <TextView
                 android:id="@+id/left_drawer_TV_last_seen"
@@ -212,8 +200,8 @@
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="italic"
-                app:layout_constraintBottom_toBottomOf="@+id/textView12"
-                app:layout_constraintStart_toEndOf="@+id/textView12" />
+                app:layout_constraintBottom_toBottomOf="@+id/left_drawer_lase_"
+                app:layout_constraintStart_toEndOf="@+id/left_drawer_lase_" />
         </android.support.constraint.ConstraintLayout>
 
         <ImageView
@@ -225,6 +213,41 @@
             app:layout_constraintStart_toEndOf="@+id/left_drawer_TV_username"
             app:layout_constraintTop_toTopOf="@+id/left_drawer_TV_username"
             app:srcCompat="@drawable/edit_img" />
+
+
     </android.support.constraint.ConstraintLayout>
     <!--登录后 ↑-->
+
+    <ImageView
+        android:id="@+id/left_drawer_IV_setting"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/sawatariyuki_NTS"
+        app:layout_constraintEnd_toEndOf="@+id/sawatariyuki_NTS"
+        app:srcCompat="@drawable/setting_img"
+        android:visibility="invisible"/>
+
+    <ImageView
+        android:id="@+id/left_drawer_IV_nightMode"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="24dp"
+        app:layout_constraintBottom_toTopOf="@+id/sawatariyuki_NTS"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/sun_moon" />
+
+    <TextView
+        android:id="@+id/sawatariyuki_NTS"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/app_name_with_rights"
+        android:textColor="@color/white"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 </android.support.constraint.ConstraintLayout>

@@ -8,7 +8,6 @@ import android.widget.TextView;
 import com.gift.sawatariyuki.amclient.R;
 
 public class ViewHolderForEvent extends RecyclerView.ViewHolder{
-
     private TextView rv_event_item_TV_title;
     private TextView rv_event_item_TV_description;
     private TextView rv_event_item_TV_type;

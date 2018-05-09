@@ -149,4 +149,5 @@
 
     <!-- left drawer -->
     <include layout="@layout/left_drawer"/>
+
 </android.support.v4.widget.DrawerLayout>

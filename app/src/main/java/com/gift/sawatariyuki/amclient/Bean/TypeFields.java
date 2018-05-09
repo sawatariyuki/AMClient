@@ -10,16 +10,14 @@ import java.util.Date;
 public class TypeFields implements Serializable {
     private String name;
     private String description;
-    private int userTimes;
-    private int emergencyLevel;
+    private int useTimes;
     private Date ctime;
     private Date last_used;
 
-    public TypeFields(String name, String description, int userTimes, int emergencyLevel, String ctime, String last_used) {
+    public TypeFields(String name, String description, int useTimes, String ctime, String last_used) {
         this.name = name;
         this.description = description;
-        this.userTimes = userTimes;
-        this.emergencyLevel = emergencyLevel;
+        this.useTimes = useTimes;
 
         this.ctime = TimeZoneChanger.StringUTCToDateLocal(ctime);
         this.last_used = TimeZoneChanger.StringUTCToDateLocal(last_used);
@@ -42,20 +40,12 @@ public class TypeFields implements Serializable {
         this.description = description;
     }
 
-    public int getUserTimes() {
-        return userTimes;
+    public int getUseTimes() {
+        return useTimes;
     }
 
-    public void setUserTimes(int userTimes) {
-        this.userTimes = userTimes;
-    }
-
-    public int getEmergencyLevel() {
-        return emergencyLevel;
-    }
-
-    public void setEmergencyLevel(int emergencyLevel) {
-        this.emergencyLevel = emergencyLevel;
+    public void setUseTimes(int useTimes) {
+        this.useTimes = useTimes;
     }
 
     public Date getCtime() {
@@ -79,8 +69,7 @@ public class TypeFields implements Serializable {
         return "TypeFields{" +
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", userTimes=" + userTimes +
-                ", emergencyLevel=" + emergencyLevel +
+                ", useTimes=" + useTimes +
                 ", ctime=" + ctime +
                 ", last_used=" + last_used +
                 '}';

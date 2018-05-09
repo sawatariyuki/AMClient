@@ -60,6 +60,13 @@ public class RequestCenter {
         RequestCenter.getRequest(ServerApi.userInfo, params, context, listener, UserInfoResponse.class, DefaultResponse.class);
     }
 
+    public static void updateUserDetail(DisposeDataListener listener, RequestParams params, Context context){
+        RequestCenter.postRequest(ServerApi.userDetail, params, context, listener, DefaultResponse.class, DefaultResponse.class);
+    }
+
+
+
+
     public static void getEvent(DisposeDataListener listener, RequestParams params, Context context){
         RequestCenter.getRequest(ServerApi.getEvent, params, context, listener, GetEventResponse.class, DefaultResponse.class);
     }
@@ -78,6 +85,14 @@ public class RequestCenter {
 
     public static void cancelOrReactiveEvent(DisposeDataListener listener, RequestParams params, Context context) {
         RequestCenter.postRequest(ServerApi.cancelEvent, params, context, listener, DefaultResponse.class, DefaultResponse.class);
+    }
+
+    public static void addOrUpdateEventType(DisposeDataListener listener, RequestParams params, Context context) {
+        RequestCenter.postRequest(ServerApi.addOrUpdateEventType, params, context, listener, DefaultResponse.class, DefaultResponse.class);
+    }
+
+    public static void deleteEventType(DisposeDataListener listener, RequestParams params, Context context) {
+        RequestCenter.postRequest(ServerApi.deleteEventType, params, context, listener, DefaultResponse.class, DefaultResponse.class);
     }
     //---------------------------------------------------------------------------------------------
 

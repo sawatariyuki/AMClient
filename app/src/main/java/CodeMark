@@ -1,0 +1,9 @@
+            requestCode	resultCode
+Home		101
+AddEvent	103		    301
+AddType				    501
+Login		102		    201
+Register			    202
+UpdateEvent	104		    401
+UserInfo
+

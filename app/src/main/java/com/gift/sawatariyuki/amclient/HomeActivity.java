@@ -65,17 +65,20 @@ public class HomeActivity extends AppCompatActivity {
     private ImageView left_drawer_IV_transition;
     private ImageView left_drawer_IV_exit;
     private ConstraintLayout left_drawer_CL;
+    private TextView left_drawer_join_;
     private TextView left_drawer_TV_joined;
+    private TextView left_drawer_lase_;
     private TextView left_drawer_TV_last_seen;
     private ConstraintLayout left_drawer_CL_userInfo;
     private ImageView left_drawer_IV_edit;
+    private ImageView left_drawer_IV_setting;
+    private ImageView left_drawer_IV_nightMode;
 
     private RecyclerView activity_home_RV_event;
     private LinearLayoutManager layoutManager;
     private TextView activity_home_TV_noEventData;
     private Spinner activity_home_state_selector;
     private ConstraintLayout activity_home_CL_user;
-
 
     private FloatingActionButton activity_home_fab;
 
@@ -120,10 +123,14 @@ public class HomeActivity extends AppCompatActivity {
         left_drawer_IV_transition = findViewById(R.id.left_drawer_IV_transition);
         left_drawer_IV_exit = findViewById(R.id.left_drawer_IV_exit);
         left_drawer_CL = findViewById(R.id.left_drawer_CL);
+        left_drawer_join_ = findViewById(R.id.left_drawer_join_);
         left_drawer_TV_joined = findViewById(R.id.left_drawer_TV_joined);
+        left_drawer_lase_ = findViewById(R.id.left_drawer_lase_);
         left_drawer_TV_last_seen = findViewById(R.id.left_drawer_TV_last_seen);
         left_drawer_CL_userInfo = findViewById(R.id.left_drawer_CL_userInfo);
         left_drawer_IV_edit = findViewById(R.id.left_drawer_IV_edit);
+        left_drawer_IV_setting = findViewById(R.id.left_drawer_IV_setting);
+        left_drawer_IV_nightMode = findViewById(R.id.left_drawer_IV_nightMode);
 
         // main
         activity_home_RV_event = findViewById(R.id.activity_home_RV_event);
@@ -138,6 +145,16 @@ public class HomeActivity extends AppCompatActivity {
 
         activity_home_fab = findViewById(R.id.activity_home_fab);
         activity_home_fab.attachToRecyclerView(activity_home_RV_event);
+
+        String mode = (String) recorder.get("colorMode", "common_day");
+        switch (mode){
+            case "common_day":
+                getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                break;
+            case "common_night":
+                getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                break;
+        }
     }
 
     private void initListener(){
@@ -193,13 +210,47 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        //日夜模式切换
+        left_drawer_IV_nightMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int mode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+                if (mode == Configuration.UI_MODE_NIGHT_YES) {
+                    getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    recorder.save("colorMode", "common_day");
+                } else if (mode == Configuration.UI_MODE_NIGHT_NO) {
+                    getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    recorder.save("colorMode", "common_night");
+                }
+                recreate();
+            }
+        });
+
+        //用户应用设置
+        left_drawer_IV_setting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO user settings here
+
+            }
+        });
+
         //修改用户信息
         left_drawer_IV_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO
+                List<Pair<View,String>> pairs = new ArrayList<Pair<View, String>>();
+                pairs.add(Pair.create((View) left_drawer_TV_username, "left_drawer_username"));
+                pairs.add(Pair.create((View) left_drawer_TV_joined, "left_drawer_joined"));
+                pairs.add(Pair.create((View) left_drawer_TV_last_seen, "left_drawer_last"));
+                pairs.add(Pair.create((View) left_drawer_TV_email, "left_drawer_email"));
+                pairs.add(Pair.create((View) left_drawer_join_, "left_drawer_join_"));
+                pairs.add(Pair.create((View) left_drawer_lase_, "left_drawer_lase_"));
+
+                Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(HomeActivity.this, pairs.toArray(new Pair[]{})).toBundle();
                 Intent intent = new Intent(HomeActivity.this, UserInfoActivity.class);
-                startActivity(intent);
+                intent.putExtra("name", username);
+                startActivity(intent, bundle);
             }
         });
 
@@ -229,27 +280,15 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        //TODO 测试点击用户名切换模式
-        left_drawer_TV_username.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int mode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
-                if (mode == Configuration.UI_MODE_NIGHT_YES) {
-                    getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                } else if (mode == Configuration.UI_MODE_NIGHT_NO) {
-                    getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                }
-                recreate();
-            }
-        });
-
         //添加事件 +Add
         activity_home_fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(types==null){
-                    //TODO 提示用户要先添加事务类型
-                    Toast.makeText(HomeActivity.this, "提示用户要先添加事务类型", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(HomeActivity.this, "Add your event type first", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(HomeActivity.this, AddTypeActivity.class);
+                    intent.putExtra("name", username);
+                    startActivityForResult(intent, REQUESTCODE);
                 }else {
                     Intent intent = new Intent(HomeActivity.this, AddEventActivity.class);
                     intent.putExtra("name", username);
@@ -321,15 +360,16 @@ public class HomeActivity extends AppCompatActivity {
             //no event data
             setVisibilityInHomeActivity(false, false);
         }else if(requestCode==REQUESTCODE && resultCode==301){  //在主界面点击添加事务，添加后返回主界面
-            activity_home_state_selector.setSelection(2);//切换STATE为Arranging
+            activity_home_state_selector.setSelection(2);   //切换STATE为Arranging
             getEventData();
         }else if(requestCode==REQUESTCODE && resultCode==401){  //取消事务后返回
+            getEventData();
+        }else if(requestCode==REQUESTCODE && resultCode==501){  //事务类型界面返回
             getEventData();
         }
     }
 
     private void userLogin(String username){
-        Log.d("DEBUG", "username: "+ username);
         //SEND POST REQUEST
         RequestParams params = new RequestParams();
         params.put("name", username);
@@ -338,12 +378,11 @@ public class HomeActivity extends AppCompatActivity {
             public void onSuccess(Object responseObj) {
                 if(responseObj instanceof UserInfoResponse){
                     UserInfoResponse response = (UserInfoResponse) responseObj;
-                    Log.d("DEBUG", response.toString());
                     UserDefault user = response.getData().getU_default();
                     left_drawer_TV_joined.setText(TimeZoneChanger.DateLocalTOStringLocalCN(user.getFields().getDate_joined()));
                     left_drawer_TV_last_seen.setText(TimeZoneChanger.DateLocalTOStringLocalCN(user.getFields().getLast_joined()));
                 }else if(responseObj instanceof DefaultResponse){
-
+                    Toast.makeText(HomeActivity.this, ((DefaultResponse) responseObj).getMsg(), Toast.LENGTH_SHORT).show();
                 }
             }
 

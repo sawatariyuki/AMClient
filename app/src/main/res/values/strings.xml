@@ -46,10 +46,18 @@
     <string name="start_time_hint">choose a start time</string>
     <string name="end_time_hint">choose an end time</string>
     <string name="length_hint">minutes</string>
-    <string name="back">◀ Back</string>
     <string name="submit">Submit</string>
     <string name="reset">Reset</string>
     <string name="add_event_info">Add Event</string>
+
+    <!--add event type activity-->
+    <string name="add_type_info">Add Event Type</string>
+    <string name="use_times">Use times:</string>
+    <string name="ctime">Create:</string>
+    <string name="last_used">Last used:</string>
+    <string name="type_name">Name</string>
+    <string name="type_name_hint">input a type name</string>
+    <string name="no_type_data">There is no type data.</string>
 
     <!--update event activity-->
     <string name="update">UPDATE</string>
@@ -62,6 +70,13 @@
     <string name="event_detail">Event Detail</string>
 
     <!--user info activity-->
-
-
+    <string name="gender">Gender</string>
+    <string name="age">Age</string>
+    <string name="weight">Weight</string>
+    <string name="birthday">Birthday</string>
+    <string name="birthplace">Birthplace</string>
+    <string name="address">Address</string>
+    <string name="male">male</string>
+    <string name="female">female</string>
+    <string name="weight_hint">kg</string>
 </resources>
