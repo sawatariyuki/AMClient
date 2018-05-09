@@ -9,6 +9,8 @@
 
     <!--left drawer-->
     <string name="inactivate">Account is inactivated</string>
+    <string name="joined">Joined</string>
+    <string name="last_seen">Last seen</string>
 
     <!--home activity-->
     <string name="no_event_data">There is no event data.</string>
@@ -49,7 +51,6 @@
     <string name="reset">Reset</string>
     <string name="add_event_info">Add Event</string>
 
-
     <!--update event activity-->
     <string name="update">UPDATE</string>
     <string name="cancel_">CANCEL</string>
@@ -59,5 +60,8 @@
     <string name="to">To</string>
     <string name="create">Create</string>
     <string name="event_detail">Event Detail</string>
+
+    <!--user info activity-->
+
 
 </resources>

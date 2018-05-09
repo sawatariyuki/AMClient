@@ -10,19 +10,15 @@ import java.util.Date;
 
 public class UserDefaultFields implements Serializable {
     private String name;
-    private String pw;
     private String email;
     private Boolean isActivated;
-    private String activateCode;
     private Date date_joined;
     private Date last_joined;
 
-    public UserDefaultFields(String name, String pw, String email, Boolean isActivated, String activateCode, String date_joined, String last_joined) {
+    public UserDefaultFields(String name, String email, Boolean isActivated, String date_joined, String last_joined) {
         this.name = name;
-        this.pw = pw;
         this.email = email;
         this.isActivated = isActivated;
-        this.activateCode = activateCode;
 
         this.date_joined = TimeZoneChanger.StringUTCToDateLocal(date_joined);
         this.last_joined = TimeZoneChanger.StringUTCToDateLocal(last_joined);
@@ -34,14 +30,6 @@ public class UserDefaultFields implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getPw() {
-        return pw;
-    }
-
-    public void setPw(String pw) {
-        this.pw = pw;
     }
 
     public String getEmail() {
@@ -60,15 +48,6 @@ public class UserDefaultFields implements Serializable {
         isActivated = activated;
     }
 
-    public String getActivateCode() {
-        return activateCode;
-    }
-
-    public void setActivateCode(String activateCode) {
-        this.activateCode = activateCode;
-    }
-
-
     public void setDate_joined(Date date_joined) {
         this.date_joined = date_joined;
     }
@@ -81,14 +60,16 @@ public class UserDefaultFields implements Serializable {
         this.last_joined = last_joined;
     }
 
+    public Date getDate_joined() {
+        return date_joined;
+    }
+
     @Override
     public String toString() {
         return "UserDefaultFields{" +
                 "name='" + name + '\'' +
-                ", pw='" + pw + '\'' +
                 ", email='" + email + '\'' +
                 ", isActivated=" + isActivated +
-                ", activateCode='" + activateCode + '\'' +
                 ", date_joined=" + date_joined +
                 ", last_joined=" + last_joined +
                 '}';

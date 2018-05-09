@@ -18,6 +18,7 @@ import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.Pair;
 import android.view.Gravity;
 import android.view.View;
@@ -37,9 +38,12 @@ import com.gift.sawatariyuki.amclient.Bean.GetEventResponse;
 import com.gift.sawatariyuki.amclient.Bean.GetTypeResponse;
 import com.gift.sawatariyuki.amclient.Bean.LoginResponse;
 import com.gift.sawatariyuki.amclient.Bean.Type;
+import com.gift.sawatariyuki.amclient.Bean.UserDefault;
+import com.gift.sawatariyuki.amclient.Bean.UserInfoResponse;
 import com.gift.sawatariyuki.amclient.Listener.OnItemClickListener;
 import com.gift.sawatariyuki.amclient.Listener.OnItemLongClickListener;
 import com.gift.sawatariyuki.amclient.ServerNetwork.RequestCenter;
+import com.gift.sawatariyuki.amclient.Utils.TimeZoneChanger;
 import com.gift.sawatariyuki.amclient.Utils.dataRecoder.DataRecorder;
 import com.gift.sawatariyuki.amclient.Utils.okHttp.listener.DisposeDataListener;
 import com.gift.sawatariyuki.amclient.Utils.okHttp.request.RequestParams;
@@ -47,6 +51,7 @@ import com.gift.sawatariyuki.amclient.ViewHolder.ViewHolderForEvent;
 import com.melnykov.fab.FloatingActionButton;
 
 import java.io.Serializable;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,12 +65,17 @@ public class HomeActivity extends AppCompatActivity {
     private ImageView left_drawer_IV_transition;
     private ImageView left_drawer_IV_exit;
     private ConstraintLayout left_drawer_CL;
+    private TextView left_drawer_TV_joined;
+    private TextView left_drawer_TV_last_seen;
+    private ConstraintLayout left_drawer_CL_userInfo;
+    private ImageView left_drawer_IV_edit;
+
     private RecyclerView activity_home_RV_event;
     private LinearLayoutManager layoutManager;
     private TextView activity_home_TV_noEventData;
     private Spinner activity_home_state_selector;
     private ConstraintLayout activity_home_CL_user;
-    private TextView activity_home_TV_state;
+
 
     private FloatingActionButton activity_home_fab;
 
@@ -110,6 +120,10 @@ public class HomeActivity extends AppCompatActivity {
         left_drawer_IV_transition = findViewById(R.id.left_drawer_IV_transition);
         left_drawer_IV_exit = findViewById(R.id.left_drawer_IV_exit);
         left_drawer_CL = findViewById(R.id.left_drawer_CL);
+        left_drawer_TV_joined = findViewById(R.id.left_drawer_TV_joined);
+        left_drawer_TV_last_seen = findViewById(R.id.left_drawer_TV_last_seen);
+        left_drawer_CL_userInfo = findViewById(R.id.left_drawer_CL_userInfo);
+        left_drawer_IV_edit = findViewById(R.id.left_drawer_IV_edit);
 
         // main
         activity_home_RV_event = findViewById(R.id.activity_home_RV_event);
@@ -121,7 +135,6 @@ public class HomeActivity extends AppCompatActivity {
         int position = Integer.valueOf((String) recorder.get("selectedEventState", "4"));
         activity_home_state_selector.setSelection(statePosition[position]);
         activity_home_CL_user = findViewById(R.id.activity_home_CL_user);
-        activity_home_TV_state = findViewById(R.id.activity_home_TV_state);
 
         activity_home_fab = findViewById(R.id.activity_home_fab);
         activity_home_fab.attachToRecyclerView(activity_home_RV_event);
@@ -180,6 +193,16 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        //修改用户信息
+        left_drawer_IV_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO
+                Intent intent = new Intent(HomeActivity.this, UserInfoActivity.class);
+                startActivity(intent);
+            }
+        });
+
         //事务状态选择器
         activity_home_state_selector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
@@ -205,14 +228,6 @@ public class HomeActivity extends AppCompatActivity {
                 activity_home_drawerLayout.openDrawer(Gravity.LEFT);
             }
         });
-
-        //点击STATE刷新
-//        activity_home_TV_state.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                getEventData();
-//            }
-//        });
 
         //TODO 测试点击用户名切换模式
         left_drawer_TV_username.setOnClickListener(new View.OnClickListener() {
@@ -257,10 +272,14 @@ public class HomeActivity extends AppCompatActivity {
         }else{
             if(!(Boolean) recorder.get("isActivated", false)){
                 left_drawer_TV_inactivate.setVisibility(View.VISIBLE);
+                left_drawer_CL_userInfo.setVisibility(View.INVISIBLE);
             }else{  //用户已激活
                 left_drawer_TV_inactivate.setVisibility(View.INVISIBLE);
+                left_drawer_CL_userInfo.setVisibility(View.VISIBLE);
                 //获取用户事务信息并显示在RecyclerView中
                 getEventData();
+                //获取用户基本信息显示在left drawer中
+                userLogin(username);
             }
             setVisibilityInLeftDrawer(true);
             left_drawer_TV_username.setText(username);
@@ -278,12 +297,17 @@ public class HomeActivity extends AppCompatActivity {
             username = response.getData().getFields().getName();
             left_drawer_TV_username.setText(username);
             left_drawer_TV_email.setText(response.getData().getFields().getEmail());
+
             if(response.getData().getFields().getActivated()){
                 left_drawer_TV_inactivate.setVisibility(View.INVISIBLE);
+                left_drawer_CL_userInfo.setVisibility(View.VISIBLE);
                 //获取用户事务信息并显示在RecyclerView中
                 getEventData();
+                //获取用户基本信息显示在left drawer中
+                userLogin(username);
             }else{
                 left_drawer_TV_inactivate.setVisibility(View.VISIBLE);
+                left_drawer_CL_userInfo.setVisibility(View.INVISIBLE);
             }
             setVisibilityInLeftDrawer(true);
         }else if(requestCode==REQUESTCODE && resultCode==202){  //在主界面点击注册，在注册后返回主界面
@@ -292,6 +316,7 @@ public class HomeActivity extends AppCompatActivity {
             left_drawer_TV_username.setText(username);
             left_drawer_TV_email.setText(email);
             left_drawer_TV_inactivate.setVisibility(View.VISIBLE);
+            left_drawer_CL_userInfo.setVisibility(View.INVISIBLE);
             setVisibilityInLeftDrawer(true);
             //no event data
             setVisibilityInHomeActivity(false, false);
@@ -301,6 +326,32 @@ public class HomeActivity extends AppCompatActivity {
         }else if(requestCode==REQUESTCODE && resultCode==401){  //取消事务后返回
             getEventData();
         }
+    }
+
+    private void userLogin(String username){
+        Log.d("DEBUG", "username: "+ username);
+        //SEND POST REQUEST
+        RequestParams params = new RequestParams();
+        params.put("name", username);
+        RequestCenter.getUserInfo(new DisposeDataListener() {
+            @Override
+            public void onSuccess(Object responseObj) {
+                if(responseObj instanceof UserInfoResponse){
+                    UserInfoResponse response = (UserInfoResponse) responseObj;
+                    Log.d("DEBUG", response.toString());
+                    UserDefault user = response.getData().getU_default();
+                    left_drawer_TV_joined.setText(TimeZoneChanger.DateLocalTOStringLocalCN(user.getFields().getDate_joined()));
+                    left_drawer_TV_last_seen.setText(TimeZoneChanger.DateLocalTOStringLocalCN(user.getFields().getLast_joined()));
+                }else if(responseObj instanceof DefaultResponse){
+
+                }
+            }
+
+            @Override
+            public void onFailure(Object responseObj) {
+
+            }
+        }, params, HomeActivity.this);
     }
 
     private void getEventData(){

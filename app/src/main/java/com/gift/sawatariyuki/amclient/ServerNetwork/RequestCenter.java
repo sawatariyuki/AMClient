@@ -9,6 +9,7 @@ import com.gift.sawatariyuki.amclient.Bean.GetEventResponse;
 import com.gift.sawatariyuki.amclient.Bean.GetTypeResponse;
 import com.gift.sawatariyuki.amclient.Bean.LoginResponse;
 import com.gift.sawatariyuki.amclient.Bean.UserDefaultList;
+import com.gift.sawatariyuki.amclient.Bean.UserInfoResponse;
 import com.gift.sawatariyuki.amclient.LoginActivity;
 import com.gift.sawatariyuki.amclient.Utils.okHttp.CommonOkHttpClient;
 import com.gift.sawatariyuki.amclient.Utils.okHttp.listener.DisposeDataHandle;
@@ -53,6 +54,10 @@ public class RequestCenter {
 
     public static void registerUser(DisposeDataListener listener, RequestParams params, Context context){
         RequestCenter.postRequest(ServerApi.register, params, context, listener, DefaultResponse.class, DefaultResponse.class);
+    }
+
+    public static void getUserInfo(DisposeDataListener listener, RequestParams params, Context context){
+        RequestCenter.getRequest(ServerApi.userInfo, params, context, listener, UserInfoResponse.class, DefaultResponse.class);
     }
 
     public static void getEvent(DisposeDataListener listener, RequestParams params, Context context){
