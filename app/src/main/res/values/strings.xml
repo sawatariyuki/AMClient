@@ -8,7 +8,7 @@
     <string name="title_activity_login">Sign in</string>
 
     <!--left drawer-->
-    <string name="inactivate">Account is inactivated</string>
+    <string name="inactivate">Account is inactivated\nCheck your email box</string>
     <string name="joined">Joined</string>
     <string name="last_seen">Last seen</string>
 

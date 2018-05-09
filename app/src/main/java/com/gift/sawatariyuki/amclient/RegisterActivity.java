@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.gift.sawatariyuki.amclient.Bean.DefaultResponse;
 import com.gift.sawatariyuki.amclient.ServerNetwork.RequestCenter;
+import com.gift.sawatariyuki.amclient.Utils.MD5Encrypt;
 import com.gift.sawatariyuki.amclient.Utils.dataRecoder.DataRecorder;
 import com.gift.sawatariyuki.amclient.Utils.okHttp.listener.DisposeDataListener;
 import com.gift.sawatariyuki.amclient.Utils.okHttp.request.RequestParams;
@@ -107,8 +108,8 @@ public class RegisterActivity extends AppCompatActivity {
                 //SEND POST REQUEST
                 RequestParams params = new RequestParams();
                 params.put("name", name);
-                params.put("pw", pw);
-                params.put("pwConfirm", pwConfirm);
+                params.put("pw", MD5Encrypt.getMD5(pw));
+                params.put("pwConfirm", MD5Encrypt.getMD5(pwConfirm));
                 params.put("email", email);
 
                 RequestCenter.registerUser(new DisposeDataListener() {

@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.opengl.Visibility;
 import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
@@ -206,7 +207,7 @@ public class HomeActivity extends AppCompatActivity {
         left_drawer_TV_inactivate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(HomeActivity.this, "You must activate your account first", Toast.LENGTH_SHORT).show();
+                Toast.makeText(HomeActivity.this, "You must activate your account first\nCheck your email box for activating", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -284,6 +285,14 @@ public class HomeActivity extends AppCompatActivity {
         activity_home_fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(!isLogin) {    //是否已登录
+                    Toast.makeText(HomeActivity.this, "Login first", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(left_drawer_TV_inactivate.getVisibility() == View.VISIBLE){
+                    Toast.makeText(HomeActivity.this, "You must activate your account first\nCheck your email box for activating", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if(types==null){
                     Toast.makeText(HomeActivity.this, "Add your event type first", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(HomeActivity.this, AddTypeActivity.class);
@@ -352,6 +361,8 @@ public class HomeActivity extends AppCompatActivity {
         }else if(requestCode==REQUESTCODE && resultCode==202){  //在主界面点击注册，在注册后返回主界面
             username = data.getStringExtra("name");
             String email = data.getStringExtra("email");
+            String pw = data.getStringExtra("pw");
+            recorder.save("isRemember", false);
             left_drawer_TV_username.setText(username);
             left_drawer_TV_email.setText(email);
             left_drawer_TV_inactivate.setVisibility(View.VISIBLE);

@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.gift.sawatariyuki.amclient.Bean.DefaultResponse;
 import com.gift.sawatariyuki.amclient.Bean.LoginResponse;
 import com.gift.sawatariyuki.amclient.ServerNetwork.RequestCenter;
+import com.gift.sawatariyuki.amclient.Utils.MD5Encrypt;
 import com.gift.sawatariyuki.amclient.Utils.dataRecoder.DataRecorder;
 import com.gift.sawatariyuki.amclient.Utils.okHttp.listener.DisposeDataListener;
 import com.gift.sawatariyuki.amclient.Utils.okHttp.request.RequestParams;
@@ -126,7 +127,7 @@ public class LoginActivity extends AppCompatActivity {
                 //SEND POST REQUEST
                 RequestParams params = new RequestParams();
                 params.put("name", username);
-                params.put("pw", password);
+                params.put("pw", MD5Encrypt.getMD5(password));
                 RequestCenter.login_POST(new DisposeDataListener() {
                     @Override
                     public void onSuccess(Object responseObj) {
