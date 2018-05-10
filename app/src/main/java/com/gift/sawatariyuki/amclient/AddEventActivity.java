@@ -237,7 +237,9 @@ public class AddEventActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        setResult(301);
+        Intent intent = new Intent();
+        intent.putExtra("new", false);
+        setResult(301, intent);
         super.onBackPressed();
     }
 
@@ -277,7 +279,9 @@ public class AddEventActivity extends AppCompatActivity {
                 String msg = response.getMsg();
                 Toast.makeText(AddEventActivity.this, msg, Toast.LENGTH_SHORT).show();
                 if(msg.equals("事务已新增")){
-                    setResult(301);
+                    Intent intent = new Intent();
+                    intent.putExtra("new", true);
+                    setResult(301, intent);
                     finish();
                 }
             }

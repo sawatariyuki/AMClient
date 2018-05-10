@@ -1,5 +1,6 @@
 package com.gift.sawatariyuki.amclient;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -41,6 +42,7 @@ public class UserInfoActivity extends AppCompatActivity {
 
     private ImageView user_info_IV_reset;
     private Button user_info_BTN_submit;
+    private ImageView user_info_IV_log;
 
     private FloatingActionButton user_info_fab;
 
@@ -73,6 +75,7 @@ public class UserInfoActivity extends AppCompatActivity {
 
         user_info_IV_reset = findViewById(R.id.user_info_IV_reset);
         user_info_BTN_submit = findViewById(R.id.user_info_BTN_submit);
+        user_info_IV_log = findViewById(R.id.user_info_IV_log);
 
         user_info_fab = findViewById(R.id.user_info_fab);
     }
@@ -131,6 +134,16 @@ public class UserInfoActivity extends AppCompatActivity {
                         gender = "男";
                         break;
                 }
+            }
+        });
+
+        //跳转到日志界面
+        user_info_IV_log.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(UserInfoActivity.this, UserLogActivity.class);
+                intent.putExtra("name", username);
+                startActivity(intent);
             }
         });
 

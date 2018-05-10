@@ -275,9 +275,10 @@
     <ImageView
         android:id="@+id/user_info_IV_reset"
         android:layout_width="32dp"
-        android:layout_height="32dp"
+        android:layout_height="34dp"
         android:layout_marginEnd="24dp"
         android:layout_marginTop="24dp"
+        android:paddingBottom="2dp"
         android:background="@color/colorPinkMain"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view5"
@@ -327,4 +328,17 @@
         fab:fab_colorNormal="@color/colorPinkMain"
         fab:fab_colorPressed="@color/colorPinkDark"
         fab:fab_colorRipple="@color/white" />
+
+    <ImageView
+        android:id="@+id/user_info_IV_log"
+        android:layout_width="36dp"
+        android:layout_height="40dp"
+        android:background="@color/colorPinkMain"
+        android:paddingBottom="4dp"
+        android:paddingStart="4dp"
+        android:paddingTop="4dp"
+        app:layout_constraintBottom_toBottomOf="@+id/user_info_last_seen"
+        app:layout_constraintEnd_toEndOf="@+id/user_info_IV_reset"
+        app:layout_constraintTop_toTopOf="@+id/user_info_joined"
+        fab:srcCompat="@drawable/log_img" />
 </android.support.constraint.ConstraintLayout>

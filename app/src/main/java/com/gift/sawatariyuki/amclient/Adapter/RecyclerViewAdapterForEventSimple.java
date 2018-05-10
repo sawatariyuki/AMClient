@@ -54,9 +54,10 @@ public class RecyclerViewAdapterForEventSimple extends RecyclerView.Adapter<View
         holder.getRv_event_small_item_length().setText(event.getFields().getLength()+"min");
         holder.getRv_event_small_item_state().setText(STATE[event.getFields().getState()]);
         if(event.getFields().getState()==0){    //等待安排 的颜色
-            holder.getRv_event_small_item_state().setTextColor(context.getResources().getColor(R.color.orange));
+            holder.getRv_event_small_item_state().setTextColor(context.getResources().getColor(R.color.white));
         }else if(event.getFields().getState()==1){  //已安排 的颜色
-            holder.getRv_event_small_item_state().setTextColor(context.getResources().getColor(R.color.dark_pink));
+            holder.getRv_event_small_item_state().setTextColor(context.getResources().getColor(R.color.white));
+            holder.getRv_event_small_item_state().getPaint().setFakeBoldText(true);
         }else if(event.getFields().getState()==2){  //已取消 的颜色
             holder.getRv_event_small_item_state().setTextColor(context.getResources().getColor(R.color.gray));
         }else{  //已完成 的颜色

@@ -80,6 +80,7 @@ public class HomeActivity extends AppCompatActivity {
     private TextView activity_home_TV_noEventData;
     private Spinner activity_home_state_selector;
     private ConstraintLayout activity_home_CL_user;
+    private TextView activity_home_TV_arrange;
 
     private FloatingActionButton activity_home_fab;
 
@@ -109,7 +110,6 @@ public class HomeActivity extends AppCompatActivity {
         initView();
         initListener();
         initData();
-
 
     }
 
@@ -143,6 +143,7 @@ public class HomeActivity extends AppCompatActivity {
         int position = Integer.valueOf((String) recorder.get("selectedEventState", "4"));
         activity_home_state_selector.setSelection(statePosition[position]);
         activity_home_CL_user = findViewById(R.id.activity_home_CL_user);
+        activity_home_TV_arrange = findViewById(R.id.activity_home_TV_arrange);
 
         activity_home_fab = findViewById(R.id.activity_home_fab);
         activity_home_fab.attachToRecyclerView(activity_home_RV_event);
@@ -307,7 +308,27 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        //自动安排事务
+        activity_home_TV_arrange.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RequestParams params = new RequestParams();
+                params.put("name", username);
+                RequestCenter.arrange(new DisposeDataListener() {
+                    @Override
+                    public void onSuccess(Object responseObj) {
+                        DefaultResponse response = (DefaultResponse) responseObj;
+                        Toast.makeText(HomeActivity.this, response.getMsg(), Toast.LENGTH_SHORT).show();
+                        getEventData();
+                    }
 
+                    @Override
+                    public void onFailure(Object responseObj) {
+
+                    }
+                }, params, HomeActivity.this);
+            }
+        });
     }
 
     private void initData(){
@@ -371,7 +392,9 @@ public class HomeActivity extends AppCompatActivity {
             //no event data
             setVisibilityInHomeActivity(false, false);
         }else if(requestCode==REQUESTCODE && resultCode==301){  //在主界面点击添加事务，添加后返回主界面
-            activity_home_state_selector.setSelection(2);   //切换STATE为Arranging
+            if(data.getBooleanExtra("new", false)) {
+                activity_home_state_selector.setSelection(2);   //切换STATE为Arranging
+            }
             getEventData();
         }else if(requestCode==REQUESTCODE && resultCode==401){  //取消事务后返回
             getEventData();
@@ -475,6 +498,14 @@ public class HomeActivity extends AppCompatActivity {
                             touchHelper = new ItemTouchHelper(callback);
                             //调用ItemTouchHelper的attachToRecyclerView方法建立联系
                             touchHelper.attachToRecyclerView(activity_home_RV_event);
+                        }
+                    }
+                    //每次更新显示用户事务信息后 若存在未安排的事务 则显示安排按钮
+                    activity_home_TV_arrange.setVisibility(View.INVISIBLE);
+                    for (int i=0; i<events.size(); i++) {
+                        if (events.get(i).getFields().getState() == 0) {
+                            activity_home_TV_arrange.setVisibility(View.VISIBLE);
+                            break;
                         }
                     }
                 }else if(responseObj instanceof DefaultResponse){

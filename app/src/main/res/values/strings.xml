@@ -14,7 +14,7 @@
 
     <!--home activity-->
     <string name="no_event_data">There is no event data.</string>
-    <string name="state_selector">STATE</string>
+    <string name="start_arrangement">▶</string>
     <string name="state_selector_title">SELECT AN EVENT STATE</string>
     <string name="add">＋</string>
     <string name="delete">Delete</string>
@@ -79,4 +79,11 @@
     <string name="male">male</string>
     <string name="female">female</string>
     <string name="weight_hint">kg</string>
+
+    <!--user log activity-->
+    <string name="operation">Operation:</string>
+    <string name="log_time">Time:</string>
+    <string name="ip">ip:</string>
+    <string name="no_log_data">There is no log data.</string>
+    <string name="log_info">Logs</string>
 </resources>

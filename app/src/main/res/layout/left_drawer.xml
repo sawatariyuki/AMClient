@@ -88,14 +88,14 @@
             android:id="@+id/left_drawer_TV_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="32dp"
             android:layout_marginStart="24dp"
             android:text="username"
             android:textColor="@color/white"
             android:textSize="28sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/guideline5"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintBottom_toBottomOf="@+id/left_drawer_IV_exit"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/left_drawer_IV_exit" />
 
         <TextView
             android:id="@+id/left_drawer_TV_email"

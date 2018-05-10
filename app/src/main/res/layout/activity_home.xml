@@ -47,19 +47,23 @@
             </android.support.v7.widget.AppCompatSpinner>
 
             <TextView
-                android:id="@+id/activity_home_TV_state"
+                android:id="@+id/activity_home_TV_arrange"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_marginBottom="8dp"
+                android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
                 android:gravity="center_vertical"
-                android:text="@string/state_selector"
+                android:paddingEnd="10dp"
+                android:paddingStart="10dp"
+                android:text="@string/start_arrangement"
                 android:textColor="@color/white"
                 android:textSize="20sp"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/activity_home_state_selector"
+                app:layout_constraintStart_toStartOf="@+id/guideline17"
                 app:layout_constraintTop_toTopOf="parent"
-                android:textStyle="bold"/>
+                android:visibility="invisible"/>
 
             <android.support.constraint.ConstraintLayout
                 android:id="@+id/activity_home_CL_user"
@@ -90,6 +94,13 @@
                     app:layout_constraintVertical_bias="0.0" />
 
             </android.support.constraint.ConstraintLayout>
+
+            <android.support.constraint.Guideline
+                android:id="@+id/guideline17"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
 
         </android.support.constraint.ConstraintLayout>
 

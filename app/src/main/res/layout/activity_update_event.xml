@@ -145,6 +145,7 @@
             android:layout_marginEnd="24dp"
             android:layout_marginStart="16dp"
             android:ems="10"
+            android:maxEms="20"
             android:hint="@string/title_hint"
             android:lines="1"
             android:textColor="@color/colorPinkMain"
@@ -209,6 +210,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:ems="4"
+            android:maxEms="8"
             android:gravity="center_horizontal"
             android:hint="@string/length_hint"
             android:inputType="numberDecimal"
@@ -255,16 +257,15 @@
 
         <android.support.v7.widget.AppCompatSpinner
             android:id="@+id/type_selector"
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:background="@null"
             android:gravity="center_vertical"
             android:spinnerMode="dropdown"
+            android:transitionName="selected_type"
             app:layout_constraintBottom_toBottomOf="@+id/textView6"
-            app:layout_constraintStart_toEndOf="@+id/textView6"
-            app:layout_constraintTop_toTopOf="@+id/textView6"
-            android:transitionName="selected_type">
+            app:layout_constraintStart_toEndOf="@+id/textView6">
 
         </android.support.v7.widget.AppCompatSpinner>
 
@@ -323,8 +324,7 @@
             android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/type_selector"
-            app:layout_constraintStart_toEndOf="@+id/type_selector"
-            app:layout_constraintTop_toTopOf="@+id/type_selector" />
+            app:layout_constraintStart_toEndOf="@+id/type_selector" />
 
         <Button
             android:id="@+id/BTN_cancelOrReactive"
@@ -449,21 +449,6 @@
             app:layout_constraintTop_toTopOf="parent" />
     </android.support.constraint.ConstraintLayout>
 
-    <com.melnykov.fab.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_gravity="bottom|right"
-        android:layout_margin="16dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
-        android:src="@drawable/back_img"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        fab:fab_colorNormal="@color/colorPinkMain"
-        fab:fab_colorPressed="@color/colorPinkDark"
-        fab:fab_colorRipple="@color/white" />
-
     <android.support.constraint.Guideline
         android:id="@+id/guideline11"
         android:layout_width="wrap_content"
@@ -488,6 +473,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <com.melnykov.fab.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/back_img"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        fab:fab_colorNormal="@color/colorPinkMain"
+        fab:fab_colorPressed="@color/colorPinkDark"
+        fab:fab_colorRipple="@color/white" />
 
 
 </android.support.constraint.ConstraintLayout>

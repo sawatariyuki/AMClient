@@ -31,7 +31,8 @@
             android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity android:name=".UpdateEventActivity" />
         <activity android:name=".AddTypeActivity" />
-        <activity android:name=".UserInfoActivity"></activity>
+        <activity android:name=".UserInfoActivity" />
+        <activity android:name=".UserLogActivity"></activity>
     </application>
 
 </manifest>

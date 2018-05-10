@@ -7,6 +7,7 @@ import android.widget.Toast;
 import com.gift.sawatariyuki.amclient.Bean.DefaultResponse;
 import com.gift.sawatariyuki.amclient.Bean.GetEventResponse;
 import com.gift.sawatariyuki.amclient.Bean.GetTypeResponse;
+import com.gift.sawatariyuki.amclient.Bean.LogResponse;
 import com.gift.sawatariyuki.amclient.Bean.LoginResponse;
 import com.gift.sawatariyuki.amclient.Bean.UserDefaultList;
 import com.gift.sawatariyuki.amclient.Bean.UserInfoResponse;
@@ -93,6 +94,14 @@ public class RequestCenter {
 
     public static void deleteEventType(DisposeDataListener listener, RequestParams params, Context context) {
         RequestCenter.postRequest(ServerApi.deleteEventType, params, context, listener, DefaultResponse.class, DefaultResponse.class);
+    }
+
+    public static void arrange(DisposeDataListener listener, RequestParams params, Context context) {
+        RequestCenter.getRequest(ServerApi.arrange, params, context, listener, DefaultResponse.class, DefaultResponse.class);
+    }
+
+    public static void getUserLog(DisposeDataListener listener, RequestParams params, Context context) {
+        RequestCenter.getRequest(ServerApi.getLog, params, context, listener, LogResponse.class, DefaultResponse.class);
     }
     //---------------------------------------------------------------------------------------------
 

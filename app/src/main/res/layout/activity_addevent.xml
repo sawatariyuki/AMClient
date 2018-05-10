@@ -144,6 +144,7 @@
             android:layout_marginEnd="24dp"
             android:layout_marginStart="16dp"
             android:ems="10"
+            android:maxEms="20"
             android:hint="@string/title_hint"
             android:lines="1"
             android:textColor="@color/colorPinkMain"
@@ -206,6 +207,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:ems="4"
+            android:maxEms="8"
             android:gravity="center_horizontal"
             android:hint="@string/length_hint"
             android:inputType="numberDecimal"
@@ -251,15 +253,14 @@
 
         <android.support.v7.widget.AppCompatSpinner
             android:id="@+id/activity_addevent_type_selector"
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:background="@null"
             android:gravity="center_vertical"
             android:spinnerMode="dropdown"
             app:layout_constraintBottom_toBottomOf="@+id/textView6"
-            app:layout_constraintStart_toEndOf="@+id/textView6"
-            app:layout_constraintTop_toTopOf="@+id/textView6">
+            app:layout_constraintStart_toEndOf="@+id/textView6">
 
         </android.support.v7.widget.AppCompatSpinner>
 
@@ -318,8 +319,7 @@
             android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/activity_addevent_type_selector"
-            app:layout_constraintStart_toEndOf="@+id/activity_addevent_type_selector"
-            app:layout_constraintTop_toTopOf="@+id/activity_addevent_type_selector" />
+            app:layout_constraintStart_toEndOf="@+id/activity_addevent_type_selector" />
 
 
     </android.support.constraint.ConstraintLayout>
@@ -359,7 +359,7 @@
         android:id="@+id/activity_addevent_fab"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:layout_gravity="bottom|right"
+        android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
