@@ -3,6 +3,7 @@ package com.gift.sawatariyuki.amclient.ViewHolder;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gift.sawatariyuki.amclient.R;
@@ -15,6 +16,7 @@ public class ViewHolderForEvent extends RecyclerView.ViewHolder{
     private TextView rv_event_item_TV_endTime;
     private TextView rv_event_item_TV_length;
     private TextView rv_event_item_TV_state;
+    private ImageView rv_event_item_IV_vibrate;
 
     private ConstraintLayout rv_event_item_CL;
     private TextView rv_event_item_TV_delete;
@@ -28,6 +30,7 @@ public class ViewHolderForEvent extends RecyclerView.ViewHolder{
         rv_event_item_TV_endTime = itemView.findViewById(R.id.rv_event_item_TV_endTime);
         rv_event_item_TV_length = itemView.findViewById(R.id.rv_event_item_TV_length);
         rv_event_item_TV_state = itemView.findViewById(R.id.rv_event_item_TV_state);
+        rv_event_item_IV_vibrate = itemView.findViewById(R.id.rv_event_item_IV_vibrate);
 
         rv_event_item_CL = itemView.findViewById(R.id.rv_event_item_CL);
         rv_event_item_TV_delete = itemView.findViewById(R.id.rv_event_item_TV_delete);
@@ -61,6 +64,10 @@ public class ViewHolderForEvent extends RecyclerView.ViewHolder{
         return rv_event_item_TV_state;
     }
 
+    public ImageView getRv_event_item_IV_vibrate() {
+        return rv_event_item_IV_vibrate;
+    }
+
     public ConstraintLayout getRv_event_item_CL() {
         return rv_event_item_CL;
     }
@@ -68,6 +75,4 @@ public class ViewHolderForEvent extends RecyclerView.ViewHolder{
     public TextView getRv_event_item_TV_delete() {
         return rv_event_item_TV_delete;
     }
-
-
 }

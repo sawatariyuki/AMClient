@@ -20,7 +20,9 @@ import com.gift.sawatariyuki.amclient.Bean.UserDetail;
 import com.gift.sawatariyuki.amclient.Bean.UserInfoResponse;
 import com.gift.sawatariyuki.amclient.ServerNetwork.RequestCenter;
 import com.gift.sawatariyuki.amclient.Utils.DateTimePicker;
+import com.gift.sawatariyuki.amclient.Utils.GenerateDynamicCode;
 import com.gift.sawatariyuki.amclient.Utils.TimeZoneChanger;
+import com.gift.sawatariyuki.amclient.Utils.dataRecoder.DataRecorder;
 import com.gift.sawatariyuki.amclient.Utils.okHttp.listener.DisposeDataListener;
 import com.gift.sawatariyuki.amclient.Utils.okHttp.request.RequestParams;
 import com.melnykov.fab.FloatingActionButton;
@@ -46,6 +48,8 @@ public class UserInfoActivity extends AppCompatActivity {
 
     private FloatingActionButton user_info_fab;
 
+    private DataRecorder recorder;
+
     //全局变量
     private String username = null;
     private String gender = "男";
@@ -57,6 +61,7 @@ public class UserInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_info);
 
         initView();
+        recorder = new DataRecorder(this);
         initListener();
         initData();
     }
@@ -160,6 +165,8 @@ public class UserInfoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 RequestParams params = new RequestParams();
+                String dynamicCode = GenerateDynamicCode.Generate( (String) recorder.get("ActivateCode", ""));
+                params.put("dynamicCode", dynamicCode);
                 params.put("name", username);
                 params.put("gender", gender);
                 params.put("weight", user_info_ET_weight.getText().toString().trim());

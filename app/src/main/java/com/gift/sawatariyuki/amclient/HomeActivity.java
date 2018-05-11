@@ -4,10 +4,15 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.opengl.Visibility;
+import android.os.Build;
 import android.os.Handler;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
+import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v4.widget.DrawerLayout;
@@ -49,12 +54,17 @@ import com.gift.sawatariyuki.amclient.Utils.dataRecoder.DataRecorder;
 import com.gift.sawatariyuki.amclient.Utils.okHttp.listener.DisposeDataListener;
 import com.gift.sawatariyuki.amclient.Utils.okHttp.request.RequestParams;
 import com.gift.sawatariyuki.amclient.ViewHolder.ViewHolderForEvent;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.melnykov.fab.FloatingActionButton;
 
 import java.io.Serializable;
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class HomeActivity extends AppCompatActivity {
     private Button left_drawer_BTN_login;
@@ -187,7 +197,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 long time = System.currentTimeMillis() - preTime;
-                if(time>2000){
+                if (time > 2000) {
                     Toast.makeText(HomeActivity.this, "Press again to logout", Toast.LENGTH_SHORT).show();
                     preTime = System.currentTimeMillis();
                     return;
@@ -427,13 +437,59 @@ public class HomeActivity extends AppCompatActivity {
         }, params, HomeActivity.this);
     }
 
+
     private void getEventData(){
         activity_home_fab.show();
         final OnItemClickListener onItemClickListener = new OnItemClickListener() {
-            @SuppressLint("RestrictedApi")
+            long preTime = System.currentTimeMillis();
+
             @Override
             public void onItemClick(Object itemValue, int position) {
+//                recorder.remove("vibrate");//TODO
+                if (events.get(position).getFields().getState()!=1) {   //非已安排的事务 无法设置震动提醒
+                    return;
+                }
 
+                ViewHolderForEvent holder = (ViewHolderForEvent) activity_home_RV_event.findViewHolderForAdapterPosition(position);
+                long time = System.currentTimeMillis() - preTime;
+                if (time > 2000) {
+                    if (holder.getRv_event_item_IV_vibrate().getVisibility() == View.INVISIBLE) {
+                        Toast.makeText(HomeActivity.this, "Press again to add a remind", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(HomeActivity.this, "Press again to remove a remind", Toast.LENGTH_SHORT).show();
+                    }
+                    preTime = System.currentTimeMillis();
+                    return;
+                }
+
+                Set<String> vibrateEvent;
+                Gson gson = new Gson();
+                String strJson = (String) recorder.get("vibrate", null);
+                if (null == strJson) {
+                    vibrateEvent = new HashSet<>();
+                } else {
+                    vibrateEvent = gson.fromJson(strJson, new TypeToken<Set<String>>(){}.getType());
+                }
+
+                if (holder.getRv_event_item_IV_vibrate().getVisibility() == View.INVISIBLE) {
+                    //TODO add a remind
+                    holder.getRv_event_item_IV_vibrate().setVisibility(View.VISIBLE);
+                    vibrateEvent.add(String.valueOf(events.get(position).getPk()));
+                    recorder.save("vibrate", gson.toJson(vibrateEvent));
+
+//                    Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+//
+//                    vibrator.vibrate(200);
+                    preTime = 0;
+//                    Log.d("DEBUG_vibrate", "add:"+recorder.getAll().toString());
+                } else {
+                    //TODO remove a remind
+                    holder.getRv_event_item_IV_vibrate().setVisibility(View.INVISIBLE);
+                    vibrateEvent.remove(String.valueOf(events.get(position).getPk()));
+                    recorder.save("vibrate", gson.toJson(vibrateEvent));
+                    preTime = 0;
+//                    Log.d("DEBUG_vibrate", "remove:"+recorder.getAll().toString());
+                }
             }
         };
 
@@ -482,13 +538,21 @@ public class HomeActivity extends AppCompatActivity {
                     events = response.getData();
                     if(types != null){
                         setVisibilityInHomeActivity(true, true);
+                        Set<String> vibrateEvent;
+                        Gson gson = new Gson();
+                        String strJson = (String) recorder.get("vibrate", null);
+                        if (null == strJson) {
+                            vibrateEvent = new HashSet<>();
+                        } else {
+                            vibrateEvent = gson.fromJson(strJson, new TypeToken<Set<String>>(){}.getType());
+                        }
                         if(adapter==null){
-                            adapter = new RecyclerViewAdapterForEvent(events, types, username, HomeActivity.this);
+                            adapter = new RecyclerViewAdapterForEvent(events, types, username, vibrateEvent, HomeActivity.this);
                             activity_home_RV_event.setAdapter(adapter);
                             adapter.setOnItemClickListener(onItemClickListener);
                             adapter.setOnItemLongClickListener(onItemLongClickListener);
                         }else{
-                            adapter.updateData(events, types, username);
+                            adapter.updateData(events, types, username, vibrateEvent);
                             adapter.notifyDataSetChanged();
                         }
                         if(callback==null){
@@ -500,6 +564,7 @@ public class HomeActivity extends AppCompatActivity {
                             touchHelper.attachToRecyclerView(activity_home_RV_event);
                         }
                     }
+
                     //每次更新显示用户事务信息后 若存在未安排的事务 则显示安排按钮
                     activity_home_TV_arrange.setVisibility(View.INVISIBLE);
                     for (int i=0; i<events.size(); i++) {
@@ -533,13 +598,22 @@ public class HomeActivity extends AppCompatActivity {
                     types = response.getData();
                     if(events != null){
                         setVisibilityInHomeActivity(true, true);
+                        Set<String> vibrateEvent;
+                        Gson gson = new Gson();
+                        String strJson = (String) recorder.get("vibrate", null);
+                        if (null == strJson) {
+                            vibrateEvent = new HashSet<>();
+                        } else {
+                            vibrateEvent = gson.fromJson(strJson, new TypeToken<Set<String>>() {
+                            }.getType());
+                        }
                         if(adapter==null){
-                            adapter = new RecyclerViewAdapterForEvent(events, types, username, HomeActivity.this);
+                            adapter = new RecyclerViewAdapterForEvent(events, types, username, vibrateEvent, HomeActivity.this);
                             activity_home_RV_event.setAdapter(adapter);
                             adapter.setOnItemClickListener(onItemClickListener);
                             adapter.setOnItemLongClickListener(onItemLongClickListener);
                         }else{
-                            adapter.updateData(events, types, username);
+                            adapter.updateData(events, types, username, vibrateEvent);
                             adapter.notifyDataSetChanged();
                         }
                         if(callback==null){

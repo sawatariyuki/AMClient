@@ -54,7 +54,7 @@ public class RequestCenter {
     }
 
     public static void registerUser(DisposeDataListener listener, RequestParams params, Context context){
-        RequestCenter.postRequest(ServerApi.register, params, context, listener, DefaultResponse.class, DefaultResponse.class);
+        RequestCenter.postRequest(ServerApi.register, params, context, listener, LoginResponse.class, DefaultResponse.class);
     }
 
     public static void getUserInfo(DisposeDataListener listener, RequestParams params, Context context){

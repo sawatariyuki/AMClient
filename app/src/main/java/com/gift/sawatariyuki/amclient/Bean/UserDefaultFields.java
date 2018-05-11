@@ -12,14 +12,15 @@ public class UserDefaultFields implements Serializable {
     private String name;
     private String email;
     private Boolean isActivated;
+    private String activateCode;
     private Date date_joined;
     private Date last_joined;
 
-    public UserDefaultFields(String name, String email, Boolean isActivated, String date_joined, String last_joined) {
+    public UserDefaultFields(String name, String email, Boolean isActivated, String activateCod, String date_joined, String last_joined) {
         this.name = name;
         this.email = email;
         this.isActivated = isActivated;
-
+        this.activateCode = activateCod;
         this.date_joined = TimeZoneChanger.StringUTCToDateLocal(date_joined);
         this.last_joined = TimeZoneChanger.StringUTCToDateLocal(last_joined);
     }
@@ -48,6 +49,14 @@ public class UserDefaultFields implements Serializable {
         isActivated = activated;
     }
 
+    public String getActivateCode() {
+        return activateCode;
+    }
+
+    public void setActivateCode(String activateCode) {
+        this.activateCode = activateCode;
+    }
+
     public void setDate_joined(Date date_joined) {
         this.date_joined = date_joined;
     }
@@ -70,6 +79,7 @@ public class UserDefaultFields implements Serializable {
                 "name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", isActivated=" + isActivated +
+                ", activateCode='" + activateCode + '\'' +
                 ", date_joined=" + date_joined +
                 ", last_joined=" + last_joined +
                 '}';

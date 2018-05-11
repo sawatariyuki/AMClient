@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gift.sawatariyuki.amclient.Bean.DefaultResponse;
+import com.gift.sawatariyuki.amclient.Bean.LoginResponse;
 import com.gift.sawatariyuki.amclient.ServerNetwork.RequestCenter;
 import com.gift.sawatariyuki.amclient.Utils.MD5Encrypt;
 import com.gift.sawatariyuki.amclient.Utils.dataRecoder.DataRecorder;
@@ -115,19 +116,25 @@ public class RegisterActivity extends AppCompatActivity {
                 RequestCenter.registerUser(new DisposeDataListener() {
                     @Override
                     public void onSuccess(Object responseObj) {
-                        DefaultResponse response = (DefaultResponse) responseObj;
-                        String msg = response.getMsg();
-                        Toast.makeText(RegisterActivity.this, msg, Toast.LENGTH_SHORT).show();
-                        if(msg.equals("用户:" + name + " 注册成功，激活码已发送到注册邮箱")){
-                            recorder.save("loggedUsername", name);
-                            recorder.save("email", email);
-                            recorder.save("isActivated", false);
-                            Intent data = new Intent();
-                            data.putExtra("name", name);
-                            data.putExtra("pw", pw);
-                            data.putExtra("email", email);
-                            setResult(202, data);
-                            finish();
+                        if (responseObj instanceof LoginResponse){
+                            LoginResponse response = (LoginResponse) responseObj;
+                            String msg = response.getMsg();
+                            Toast.makeText(RegisterActivity.this, msg, Toast.LENGTH_SHORT).show();
+                            if(msg.equals("用户:" + name + " 注册成功，激活码已发送到注册邮箱")){
+                                recorder.save("loggedUsername", name);
+                                recorder.save("email", email);
+                                recorder.save("isActivated", false);
+                                recorder.save("ActivateCode", response.getData().getFields().getActivateCode());
+                                Intent data = new Intent();
+                                data.putExtra("name", name);
+                                data.putExtra("pw", pw);
+                                data.putExtra("email", email);
+                                setResult(202, data);
+                                finish();
+                            }
+                        } else if (responseObj instanceof DefaultResponse) {
+                            DefaultResponse response = (DefaultResponse) responseObj;
+                            Toast.makeText(RegisterActivity.this, response.getMsg(), Toast.LENGTH_SHORT).show();
                         }
                     }
 

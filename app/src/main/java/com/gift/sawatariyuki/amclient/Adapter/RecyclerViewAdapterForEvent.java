@@ -21,36 +21,45 @@ import com.gift.sawatariyuki.amclient.Listener.OnItemClickListener;
 import com.gift.sawatariyuki.amclient.Listener.OnItemLongClickListener;
 import com.gift.sawatariyuki.amclient.R;
 import com.gift.sawatariyuki.amclient.ServerNetwork.RequestCenter;
+import com.gift.sawatariyuki.amclient.Utils.GenerateDynamicCode;
 import com.gift.sawatariyuki.amclient.Utils.TimeZoneChanger;
+import com.gift.sawatariyuki.amclient.Utils.dataRecoder.DataRecorder;
 import com.gift.sawatariyuki.amclient.Utils.okHttp.listener.DisposeDataListener;
 import com.gift.sawatariyuki.amclient.Utils.okHttp.request.RequestParams;
 import com.gift.sawatariyuki.amclient.ViewHolder.ViewHolderForEvent;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class RecyclerViewAdapterForEvent extends RecyclerView.Adapter<ViewHolderForEvent> implements ItemTouchHelperAdapter {
     private List<Event> events;
     private List<Type> types;
     private String username;
     private static String STATE[] = {"等待安排", "已安排", "已取消", "已完成"};
+    private  Set<String> vibrateEvent;
     private Context context;
 
     private OnItemClickListener<Event> onItemClickListener;
     private OnItemLongClickListener<Event> onItemLongClickListener;
 
-    public RecyclerViewAdapterForEvent(List<Event> events, List<Type> types, String username, Context context){
+    public RecyclerViewAdapterForEvent(List<Event> events, List<Type> types, String username, Set<String> vibrateEvent, Context context){
         this.events = events;
         this.types = types;
         this.username = username;
+        this.vibrateEvent = vibrateEvent;
         this.context = context;
     }
 
-    public void updateData(List<Event> events, List<Type> types, String username){
+    public void updateData(List<Event> events, List<Type> types, String username, Set<String> vibrateEvent){
         this.events = events;
         this.types = types;
         this.username = username;
+        this.vibrateEvent = vibrateEvent;
     }
 
     @NonNull
@@ -102,7 +111,14 @@ public class RecyclerViewAdapterForEvent extends RecyclerView.Adapter<ViewHolder
             );
         }
 
-        if(this.onItemClickListener != null){
+        //该事务是否设置了提醒
+        if (vibrateEvent.contains(String.valueOf(event.getPk()))) {
+            holder.getRv_event_item_IV_vibrate().setVisibility(View.VISIBLE);
+        } else {
+            holder.getRv_event_item_IV_vibrate().setVisibility(View.INVISIBLE);
+        }
+
+        if (this.onItemClickListener != null) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -110,7 +126,7 @@ public class RecyclerViewAdapterForEvent extends RecyclerView.Adapter<ViewHolder
                 }
             });
         }
-        if(this.onItemLongClickListener != null){
+        if (this.onItemLongClickListener != null) {
             holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
@@ -151,8 +167,22 @@ public class RecyclerViewAdapterForEvent extends RecyclerView.Adapter<ViewHolder
             public void onSuccess(Object responseObj) {
                 DefaultResponse response = (DefaultResponse) responseObj;
                 Toast.makeText(context, response.getMsg(), Toast.LENGTH_SHORT).show();
-                events.remove(position);
-                notifyItemRemoved(position);
+                if (response.getMsg().equals("事务已删除")) {
+                    DataRecorder recorder = new DataRecorder(context);
+                    Set<String> vibrateEvent;
+                    Gson gson = new Gson();
+                    String strJson = (String) recorder.get("vibrate", null);
+                    if (null == strJson) {
+                        vibrateEvent = new HashSet<>();
+                    } else {
+                        vibrateEvent = gson.fromJson(strJson, new TypeToken<Set<String>>(){}.getType());
+                    }
+                    vibrateEvent.remove(String.valueOf(events.get(position).getPk()));
+                    recorder.save("vibrate", new Gson().toJson(vibrateEvent));
+//                    Log.d("DEBUG_vibrate", "delete:"+recorder.getAll().toString());
+                    events.remove(position);
+                    notifyItemRemoved(position);
+                }
             }
             @Override
             public void onFailure(Object responseObj) {

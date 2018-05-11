@@ -102,7 +102,11 @@ public class DataRecorder {
  *
  * password     LoginActivity中记住的密码
  *
+ * ActivateCode RegisterActivity 及 LoginActivity中记住的用户激活码
+ *
  * selectedEventState   HomeActivity中的事务的state
  *
  * colorMode    应用颜色主题: common_day common_night
+ *
+ * vibrate  记录的提醒事件position
  */

@@ -22,20 +22,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/rv_event_item_TV_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:text="thisisdescriptionthisisdescription"
-            android:textColor="@color/colorPinkMain"
-            android:textSize="16sp"
-            android:lines="1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rv_event_item_TV_title" />
+    <TextView
+        android:id="@+id/rv_event_item_TV_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:lines="1"
+        android:text="thisisdescriptionthisisdescription"
+        android:textColor="@color/colorPinkMain"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/rv_event_item_IV_vibrate"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rv_event_item_TV_title" />
 
     <TextView
         android:id="@+id/rv_event_item_TV_type"
@@ -124,27 +124,40 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <View
-            android:layout_width="1dp"
-            android:layout_height="0dp"
-            android:layout_marginEnd="8dp"
-            android:background="@color/colorPrimaryDark"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <View
+        android:id="@+id/view8"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/colorPrimaryDark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/rv_event_item_TV_delete"
         android:layout_width="100dp"
         android:layout_height="0dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:background="@color/colorPinkMain"
         android:gravity="center"
         android:text="@string/delete"
         android:textColor="@color/white"
-        android:textStyle="bold"
         android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/rv_event_item_TV_description"
+        app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/rv_event_item_IV_vibrate"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/colorPinkMain"
+        app:layout_constraintBottom_toBottomOf="@+id/rv_event_item_TV_description"
+        app:layout_constraintEnd_toStartOf="@+id/view8"
+        app:layout_constraintTop_toTopOf="@+id/rv_event_item_TV_description"
+        app:srcCompat="@drawable/vibrate_img"
+        android:visibility="invisible"/>
 </android.support.constraint.ConstraintLayout>

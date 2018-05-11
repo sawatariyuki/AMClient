@@ -10,6 +10,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -112,8 +113,15 @@ public class AddTypeActivity extends AppCompatActivity {
 
         //删除
         add_type_BTN_delete.setOnClickListener(new View.OnClickListener() {
+            long preTime;
             @Override
             public void onClick(View v) {
+                long time = System.currentTimeMillis() - preTime;
+                if (time > 2000) {
+                    Toast.makeText(AddTypeActivity.this, "Press again to delete a type", Toast.LENGTH_SHORT).show();
+                    preTime = System.currentTimeMillis();
+                    return;
+                }
                 deleteType();
             }
         });

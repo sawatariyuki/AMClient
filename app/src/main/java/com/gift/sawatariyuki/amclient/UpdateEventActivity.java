@@ -10,6 +10,7 @@ import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.util.StateSet;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -158,8 +159,15 @@ public class UpdateEventActivity extends AppCompatActivity {
 
         //删除
         BTN_delete.setOnClickListener(new View.OnClickListener() {
+            long preTime = System.currentTimeMillis();
             @Override
             public void onClick(View v) {
+                long time = System.currentTimeMillis() - preTime;
+                if (time > 2000) {
+                    Toast.makeText(UpdateEventActivity.this, "Press again to delete an event", Toast.LENGTH_SHORT).show();
+                    preTime = System.currentTimeMillis();
+                    return;
+                }
                 postDeleteData();
             }
         });

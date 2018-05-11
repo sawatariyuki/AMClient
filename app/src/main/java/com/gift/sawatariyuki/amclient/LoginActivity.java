@@ -139,6 +139,7 @@ public class LoginActivity extends AppCompatActivity {
                                 recorder.save("loggedUsername", response.getData().getFields().getName());
                                 recorder.save("email", response.getData().getFields().getEmail());
                                 recorder.save("isActivated", response.getData().getFields().getActivated());
+                                recorder.save("ActivateCode", response.getData().getFields().getActivateCode());
                                 Intent data = new Intent();
                                 data.putExtra("response", response);
                                 setResult(201, data);
