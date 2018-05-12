@@ -111,8 +111,8 @@ public class RecyclerViewAdapterForEvent extends RecyclerView.Adapter<ViewHolder
             );
         }
 
-        //该事务是否设置了提醒
-        if (vibrateEvent.contains(String.valueOf(event.getPk()))) {
+        //该事务是否设置了提醒    若设置了并且该事务处于已安排状态 则显示
+        if (vibrateEvent.contains(String.valueOf(event.getPk())) && event.getFields().getState()==1) {
             holder.getRv_event_item_IV_vibrate().setVisibility(View.VISIBLE);
         } else {
             holder.getRv_event_item_IV_vibrate().setVisibility(View.INVISIBLE);

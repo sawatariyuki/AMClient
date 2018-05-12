@@ -4,6 +4,8 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -29,6 +31,7 @@ import android.util.Pair;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewAnimationUtils;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -62,6 +65,7 @@ import java.io.Serializable;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -106,6 +110,8 @@ public class HomeActivity extends AppCompatActivity {
     private int statePosition[] = {2, 3, 4, 5, 0, 1};
     private String selectedState = null;
     private Boolean isLogin;
+
+    private static String EVENT_ALARM_ACTION = "EVENT_ALARM";
 
     private RecyclerViewAdapterForEvent adapter;
     private ItemTouchHelper.Callback callback;
@@ -329,6 +335,7 @@ public class HomeActivity extends AppCompatActivity {
                     public void onSuccess(Object responseObj) {
                         DefaultResponse response = (DefaultResponse) responseObj;
                         Toast.makeText(HomeActivity.this, response.getMsg(), Toast.LENGTH_SHORT).show();
+                        activity_home_state_selector.setSelection(3);   //切换STATE为Arranged
                         getEventData();
                     }
 
@@ -438,14 +445,32 @@ public class HomeActivity extends AppCompatActivity {
     }
 
 
-    private void getEventData(){
+    private void setAlarm(Event event, int requestCode) {
+        Intent intent = new Intent(EVENT_ALARM_ACTION);
+        intent.putExtra("event_title", event.getFields().getTitle());
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(HomeActivity.this, requestCode, intent, 0);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, event.getFields().getSysStartTime().getTime(), pendingIntent);
+        Toast.makeText(HomeActivity.this, "Notification applied", Toast.LENGTH_SHORT).show();
+    }
+
+    private void cancelAlarm(Event event, int requestCode) {
+        Intent intent = new Intent(EVENT_ALARM_ACTION);
+        intent.putExtra("event_title", event.getFields().getTitle());
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(HomeActivity.this, requestCode, intent, 0);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+        Toast.makeText(HomeActivity.this, "Notification cancelled", Toast.LENGTH_SHORT).show();
+    }
+
+    private void getEventData() {
         activity_home_fab.show();
         final OnItemClickListener onItemClickListener = new OnItemClickListener() {
             long preTime = System.currentTimeMillis();
 
             @Override
             public void onItemClick(Object itemValue, int position) {
-//                recorder.remove("vibrate");//TODO
+//                recorder.remove("vibrate");//TODO reset the sharedPreference
                 if (events.get(position).getFields().getState()!=1) {   //非已安排的事务 无法设置震动提醒
                     return;
                 }
@@ -454,9 +479,9 @@ public class HomeActivity extends AppCompatActivity {
                 long time = System.currentTimeMillis() - preTime;
                 if (time > 2000) {
                     if (holder.getRv_event_item_IV_vibrate().getVisibility() == View.INVISIBLE) {
-                        Toast.makeText(HomeActivity.this, "Press again to add a remind", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(HomeActivity.this, "Press again to add a notification", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(HomeActivity.this, "Press again to remove a remind", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(HomeActivity.this, "Press again to remove a notification", Toast.LENGTH_SHORT).show();
                     }
                     preTime = System.currentTimeMillis();
                     return;
@@ -472,23 +497,21 @@ public class HomeActivity extends AppCompatActivity {
                 }
 
                 if (holder.getRv_event_item_IV_vibrate().getVisibility() == View.INVISIBLE) {
-                    //TODO add a remind
+                    //add a notification
                     holder.getRv_event_item_IV_vibrate().setVisibility(View.VISIBLE);
                     vibrateEvent.add(String.valueOf(events.get(position).getPk()));
                     recorder.save("vibrate", gson.toJson(vibrateEvent));
-
-//                    Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-//
-//                    vibrator.vibrate(200);
+                    //设置提醒闹钟
+                    setAlarm(events.get(position), events.get(position).getPk());
                     preTime = 0;
-//                    Log.d("DEBUG_vibrate", "add:"+recorder.getAll().toString());
                 } else {
-                    //TODO remove a remind
+                    //remove a notification
                     holder.getRv_event_item_IV_vibrate().setVisibility(View.INVISIBLE);
                     vibrateEvent.remove(String.valueOf(events.get(position).getPk()));
                     recorder.save("vibrate", gson.toJson(vibrateEvent));
+                    //取消提醒闹钟
+                    cancelAlarm(events.get(position), events.get(position).getPk());
                     preTime = 0;
-//                    Log.d("DEBUG_vibrate", "remove:"+recorder.getAll().toString());
                 }
             }
         };

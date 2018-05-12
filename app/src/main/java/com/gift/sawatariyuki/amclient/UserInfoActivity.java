@@ -64,6 +64,7 @@ public class UserInfoActivity extends AppCompatActivity {
         recorder = new DataRecorder(this);
         initListener();
         initData();
+        ChangeColor(false);
     }
 
     private void initView() {
