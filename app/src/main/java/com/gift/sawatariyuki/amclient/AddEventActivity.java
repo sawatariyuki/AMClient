@@ -1,24 +1,19 @@
 package com.gift.sawatariyuki.amclient;
 
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.gift.sawatariyuki.amclient.Adapter.TypeSelectorAdapter;
@@ -151,6 +146,7 @@ public class AddEventActivity extends AppCompatActivity {
                 checkValid();
             }
         };
+
         activity_addevent_ET_title.addTextChangedListener(watcher);
         activity_addevent_ET_description.addTextChangedListener(watcher);
         activity_addevent_ET_start.addTextChangedListener(watcher);
@@ -177,13 +173,13 @@ public class AddEventActivity extends AppCompatActivity {
         activity_addevent_ET_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DateTimePicker.GetDateTimePicker(activity_addevent_ET_start, AddEventActivity.this);
+                DateTimePicker.GetDateTimePicker(activity_addevent_ET_start, activity_addevent_ET_end, activity_addevent_ET_length, AddEventActivity.this);
             }
         });
         activity_addevent_ET_end.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DateTimePicker.GetDateTimePicker(activity_addevent_ET_end, AddEventActivity.this);
+                DateTimePicker.GetDateTimePicker(activity_addevent_ET_end, activity_addevent_ET_start, activity_addevent_ET_length, AddEventActivity.this);
             }
         });
 
@@ -260,7 +256,13 @@ public class AddEventActivity extends AppCompatActivity {
         String description = activity_addevent_ET_description.getText().toString().trim();
         String start = TimeZoneChanger.StringLocalToStringUTC(activity_addevent_ET_start.getText().toString());
         String end = TimeZoneChanger.StringLocalToStringUTC(activity_addevent_ET_end.getText().toString());
-        String length = activity_addevent_ET_length.getText().toString();
+        int timeLength = 0;
+        try {
+            timeLength = Integer.valueOf(activity_addevent_ET_length.getText().toString());
+        } catch (Exception e) {
+            Log.d("DEBUG", "In AddEventActivity postData():" + e.toString());
+        }
+        String length = String.valueOf(timeLength);
 
         //SEND POST REQUEST
         RequestParams params = new RequestParams();

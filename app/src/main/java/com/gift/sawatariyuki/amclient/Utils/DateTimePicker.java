@@ -8,13 +8,21 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
 
+import com.gift.sawatariyuki.amclient.AddEventActivity;
+
 import java.util.Calendar;
 
 /***
  * 时间日期选择器
  */
 public class DateTimePicker {
-    public static void GetDateTimePicker(final EditText editText, final Context context){
+    /***
+     * 当仅选择
+     * @param timeET_1 点击后弹出时间日期选择器的EditText
+     * @param timeET_2 另一个需要填写时间日期的EditText
+     * @param length 需要填写时长的EditText
+     */
+    public static void GetDateTimePicker(final EditText timeET_1, final EditText timeET_2, final EditText length, final Context context){
         final Calendar calendar = Calendar.getInstance();
         DatePickerDialog datePickerDialog = new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
 
@@ -27,8 +35,13 @@ public class DateTimePicker {
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         calendar.set(year, month, dayOfMonth, hourOfDay, minute);
                         String time = (String) DateFormat.format("yyyy-MM-dd HH:mm", calendar);
-                        editText.setText(time);
-                        editText.setSelection(time.length());
+                        timeET_1.setText(time);
+                        if ("".equals(timeET_2.getText().toString())) {
+                            timeET_2.setText(time);
+                        }
+                        if ("".equals(length.getText().toString())) {
+                            length.setText("0");
+                        }
                     }
                 }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
                 timePickerDialog.show();
