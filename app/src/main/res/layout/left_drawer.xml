@@ -172,7 +172,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="2018-01-01 00:00"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="italic"
@@ -196,7 +195,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="2018-01-01 00:00"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="italic"
@@ -227,7 +225,7 @@
         app:layout_constraintBottom_toTopOf="@+id/sawatariyuki_NTS"
         app:layout_constraintEnd_toEndOf="@+id/sawatariyuki_NTS"
         app:srcCompat="@drawable/setting_img"
-        android:visibility="invisible"/>
+        />
 
     <ImageView
         android:id="@+id/left_drawer_IV_nightMode"

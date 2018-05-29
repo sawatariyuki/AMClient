@@ -86,4 +86,8 @@
     <string name="ip">ip:</string>
     <string name="no_log_data">There is no log data.</string>
     <string name="log_info">Logs</string>
+
+    <!--settings activity-->
+    <string name="settings_exit">Logout</string>
+    <string name="clear_data">Clear data</string>
 </resources>

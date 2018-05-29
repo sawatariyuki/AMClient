@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.gift.sawatariyuki.amclient">
-    
-    
+
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -22,9 +21,9 @@
         <receiver android:name=".Receivers.EventAlarmReceiver">
             <intent-filter>
                 <action android:name="EVENT_ALARM" />
-        </intent-filter>
+            </intent-filter>
         </receiver>
-        
+
         <activity android:name=".HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -40,7 +39,8 @@
         <activity android:name=".UpdateEventActivity" />
         <activity android:name=".AddTypeActivity" />
         <activity android:name=".UserInfoActivity" />
-        <activity android:name=".UserLogActivity"></activity>
+        <activity android:name=".UserLogActivity" />
+        <activity android:name=".SettingsActivity"></activity>
     </application>
 
 </manifest>

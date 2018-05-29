@@ -248,8 +248,8 @@ public class HomeActivity extends AppCompatActivity {
         left_drawer_IV_setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO user settings here
-
+                Intent intent = new Intent(HomeActivity.this, SettingsActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -470,7 +470,7 @@ public class HomeActivity extends AppCompatActivity {
 
             @Override
             public void onItemClick(Object itemValue, int position) {
-//                recorder.remove("vibrate");//TODO reset the sharedPreference
+//                recorder.remove("vibrate");   //TODO reset the sharedPreference
                 if (events.get(position).getFields().getState()!=1) {   //非已安排的事务 无法设置震动提醒
                     return;
                 }
